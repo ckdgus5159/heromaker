@@ -254,15 +254,22 @@ function Game() {
         </div>
       );
     }
-
     if (step === 'loading') {
         return (
-            <div className="game-container loading-screen" style={{ justifyContent: 'center' }}>
-            <div className="pixel-avatar bounce-anim">✨</div>
-            <h2 className="pixel-text" style={{ fontSize: '24px' }}>용사 기운 충전 중!</h2>
-            <p style={{ color: '#636e72' }}>조금만 기다려주세요!</p>
+        <div className="game-container loading-screen">
+            {/* 상단: 글씨 구역 */}
+            <div className="loading-text-zone">
+            <h2 className="pixel-text loading-title">운명의 기록 판독 중</h2>
+            <p className="loading-subtitle">당신의 성향을 분석하여 최적의 인생 캐릭터를 생성하고 있습니다.</p>
             </div>
-      );
+            
+            {/* 하단: 아이콘 구역 (글씨와 겹치지 않게 분리) */}
+            <div className="loading-icon-zone">
+            {/* 모래시계 대신 귀여운 도트 용사/장비 아이콘으로 변경 */}
+            <div className="pixel-avatar loading-char-anim">⚔️🛡️🧑‍🎤</div>
+            </div>
+        </div>
+        );
     }
 
     const finalType = getResultType();

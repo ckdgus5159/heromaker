@@ -269,6 +269,54 @@ html, body {
   width: 100%;
   box-sizing: border-box;
 }
+.loading-screen {
+  display: flex;
+  flex-direction: column; /* 🌟 위아래로 구역 분리 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.loading-text-zone {
+  margin-bottom: 30px; /* 아이콘 구역과의 여백 */
+  width: 100%;
+  z-index: 10; /* 글씨가 위에 오도록 */
+}
+.loading-title {
+  font-size: 28px;
+  color: var(--point-yellow);
+  text-shadow: 2px 2px #c0392b;
+  margin-bottom: 15px;
+}
+
+.loading-subtitle {
+  font-size: 16px;
+  color: #bdc3c7;
+  line-height: 1.6;
+  word-break: keep-all;
+  margin: 0;
+}
+
+/* 하단 아이콘 구역 */
+.loading-icon-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* 귀여운 도트 용사 애니메이션 (글씨를 가리지 않는 크기로 조절) */
+.loading-char-anim {
+  font-size: 80px; /* 🌟 이전보다 작게 조절하여 글씨 공간 확보 */
+  margin: 0;
+  animation: loadingFloat 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingFloat {
+  0%, 100% { transform: translateY(0px) rotate(-5deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
 
 .stat-row {
   display: flex;
