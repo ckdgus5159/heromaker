@@ -449,7 +449,369 @@ html, body {
   background-color: #34495e;
   border: 2px solid #ecf0f1;
   border-radius: 4px;
+  cursor: pointer;/* 1. 폰트 설정: 한글 지원 픽셀 폰트 (둥근모) */
+@font-face {
+    font-family: 'DungGeunMo';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+  --bg-dark: #1a1a1a;        /* 전체 배경 */
+  --container-bg: #2c3e50;   /* 메인 컨테이너 */
+  --point-yellow: #f1c40f;   /* 포인트 텍스트 */
+  --point-green: #2ecc71;    /* 입력창 글씨 / 메인 버튼 */
+  --border-light: #ecf0f1;   /* 테두리 */
+  --box-black: #000000;      /* 질문/타이머 박스 배경 */
+  --lion-red: #e67e22;       /* 사자 길드 */
+  --mage-blue: #3498db;      /* 마탑 길드 */
+  --priest-yellow: #f1c40f;  /* 신성 교단 */
+}
+
+/* 기초 레이아웃 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 20px 20px;
+  font-family: 'DungGeunMo', sans-serif; /* 한글 깨짐 방지를 위해 최우선 적용 */
+  color: #fff;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/* --- 👑 상단 고정 상태창 --- */
+.header-status-bar {
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background-color: var(--container-bg);
+  border: 4px solid var(--border-light);
+  border-top: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  box-sizing: border-box;
+}
+
+.header-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 15px;
+  position: relative;
+}
+
+.header-title {
+  font-size: 22px;
+  color: var(--point-yellow);
   cursor: pointer;
+  text-shadow: 2px 2px #000;
+}
+
+.header-wakeup-btn {
+  position: absolute;
+  right: 10px;
+  background: #8e44ad;
+  border: 2px solid #fff;
+  color: #fff;
+  font-family: 'DungGeunMo';
+  font-size: 11px;
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* --- 🎮 메인 콘텐츠 레이아웃 --- */
+.main-content-wrapper {
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  margin-top: -4px;
+}
+
+.game-container {
+  flex: 1;
+  background-color: var(--container-bg);
+  border: 4px solid var(--border-light);
+  border-top: none;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* --- ✨ 메인 화면 (공간 분리 및 중앙 정렬) --- */
+.title { 
+  font-size: 48px; 
+  color: var(--point-yellow);
+  text-shadow: 3px 3px #c0392b;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-graphic {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.main-emoji {
+  font-size: 100px;
+  margin-bottom: 30px;
+  animation: floatEmoji 2.5s ease-in-out infinite;
+}
+
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #bdc3c7;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+/* --- 🔘 버튼 시스템 --- */
+.pixel-button {
+  background-color: var(--point-green);
+  border: none;
+  border-bottom: 6px solid #1e8449;
+  color: white;
+  padding: 18px;
+  font-size: 20px;
+  font-family: 'DungGeunMo';
+  cursor: pointer;
+  margin-top: 15px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pixel-button:active {
+  transform: translateY(4px);
+  border-bottom-width: 2px;
+}
+
+.lion-btn { background-color: var(--lion-red); border-bottom-color: #d35400; }
+.mage-btn { background-color: var(--mage-blue); border-bottom-color: #2980b9; }
+.priest-btn { background-color: var(--priest-yellow); border-bottom-color: #f39c12; color: #000; }
+.gray { background-color: #34495e; border-bottom-color: #2c3e50; }
+.option-btn { text-align: left; font-size: 17px; margin-top: 12px; }
+
+/* --- 📝 입력창 & 질문 박스 --- */
+.info-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.info-form input, .info-form select {
+  width: 100%;
+  padding: 14px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: var(--point-green); 
+  border: 2px solid #7f8c8d;
+  font-family: 'DungGeunMo';
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.question-box {
+  background-color: var(--box-black);
+  border: 3px solid var(--border-light);
+  padding: 25px 20px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-bottom: 25px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.question-text {
+  font-size: 19px;
+  line-height: 1.6;
+  margin: 0;
+  word-break: keep-all;
+}
+
+/* --- ⏳ 로딩 화면 (겹침 방지) --- */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 40px 20px;
+}
+
+.loading-text-zone {
+  margin-bottom: 50px;
+}
+
+.bounce-anim {
+  font-size: 80px;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* --- 🧑‍🎤 결과 카드 --- */
+.character-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px dashed var(--point-yellow);
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 8px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.card-avatar-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 120px;
+  margin-bottom: 20px;
+}
+
+.hero-icon-large {
+  font-size: 100px;
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+}
+
+.card-info-box {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 15px;
+  margin: 15px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
+}
+
+/* --- 🎮 미니게임 가시성 및 폰트 교정 (최종) --- */
+.timer-box {
+  background-color: var(--box-black) !important;
+  border: 4px solid var(--border-light) !important;
+  padding: 40px 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+}
+
+/* 미니게임 대형 숫자 폰트 교정 */
+.timer-display, .magic-time, .priest-header {
+  font-family: 'DungGeunMo', sans-serif !important;
+  font-size: 64px !important;
+  color: var(--point-yellow) !important;
+  text-shadow: 4px 4px #c0392b;
+  margin-bottom: 20px;
+}
+
+.game-msg {
+  font-size: 20px;
+  color: #ffffff;
+  text-shadow: 2px 2px #000;
+}
+
+.power-bar-container {
+  width: 100%;
+  height: 35px;
+  background-color: #34495e;
+  border: 3px solid var(--border-light);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.power-bar-fill {
+  height: 100%;
+  background-color: var(--mage-blue);
+  transition: width 0.1s ease-out;
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.tile {
+  aspect-ratio: 1;
+  background-color: #34495e;
+  border: 3px solid var(--border-light);
+  border-radius: 4px;
+}
+
+.tile.active {
+  background-color: var(--priest-yellow);
+  box-shadow: 0 0 20px var(--priest-yellow);
+}
+
+/* 📱 모바일 대응 */
+@media (max-width: 500px) {
+  .header-status-bar, .main-content-wrapper { max-width: 100%; border-left: none; border-right: none; }
+  .title { font-size: 38px; }
+  .main-emoji, .hero-icon-large { font-size: 80px; }
+  .timer-display, .magic-time { font-size: 48px !important; }
+}
   transition: background-color 0.1s;
 }
 
