@@ -280,7 +280,7 @@ function Game() {
             {isPriestGuild && <button onClick={() => { setStep('minigame_priest'); resetPriestGame(); }} className="pixel-button guild-btn priest-btn">🌙 신성 교단 훈련장</button>}
           </div>
           <button onClick={() => window.location.reload()} className="pixel-button retry-btn">다시 만들기</button>
-          <button onClick={handleWakeUp} className="pixel-button wakeup-large-btn">🔮 이세계로 돌아가기</button>
+        
         </div>
       );
     }
@@ -294,7 +294,6 @@ function Game() {
           <div className="answer-buttons">
             {!isRunning ? <button onClick={startMinigame} className="pixel-button start-btn">START</button> : <button onClick={stopMinigame} className="pixel-button stop-btn">STOP</button>}
             <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-            <button onClick={handleWakeUp} className="pixel-button wakeup-large-btn">🔮 이세계로 돌아가기</button>
           </div>
         </div>
       );
@@ -318,7 +317,6 @@ function Game() {
               </>
             )}
             <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-            <button onClick={handleWakeUp} className="pixel-button wakeup-large-btn">🔮 이세계로 돌아가기</button>
           </div>
         </div>
       );
@@ -340,7 +338,7 @@ function Game() {
               </>
             )}
             <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-            <button onClick={handleWakeUp} className="pixel-button wakeup-large-btn">🔮 이세계로 돌아가기</button>
+            
           </div>
         </div>
       );
