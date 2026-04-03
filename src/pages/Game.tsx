@@ -201,17 +201,25 @@ function Game() {
         </div>
       );
     }
-
     if (step === 'start') {
-      return (
+    return (
         <div className="game-container start-screen">
-          <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
-          <div className="hero-graphic"><div className="main-emoji">🗡️🛡️</div><p className="lore-text">평화롭던 마을에 드리운 어둠...<br/>세계의 운명이 당신의 선택에 달렸다.<br/><br/>자신만의 무기와 방어구를 갖추고<br/>운명의 길드로 향하라!</p></div>
-          <button onClick={() => setStep('info')} className="pixel-button">게임 시작</button>
+        <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
+        
+        <div className="hero-graphic">
+            <div className="main-emoji">🗡️🛡️</div>
+            <p className="subtitle" style={{ fontSize: '18px', lineHeight: '1.6' }}>
+            평화롭던 마을에 드리운 어둠...<br/>
+            세계의 운명이 당신의 선택에 달렸다.
+            </p>
         </div>
-      );
-    }
 
+        <div className="button-area">
+            <button onClick={() => setStep('info')} className="pixel-button">게임 시작</button>
+        </div>
+        </div>
+    );
+    }
     if (step === 'info') {
       return (
         <div className="game-container info-screen">
@@ -263,26 +271,29 @@ function Game() {
     const isPriestGuild = [2, 3, 4].includes(finalType);
 
     if (step === 'result') {
-      return (
+    return (
         <div className="game-container result-screen">
-          <h2 className="pixel-text">🎉 용사 탄생! 🎉</h2>
-          <div className="character-card">
-            <p className="guild-name">[{getGuildName(finalType)} 소속]</p>
-            <div className="pixel-avatar">🧑‍🎤</div>
-            <h3 className="hero-title">{enneagramTypes[finalType]}<br/>{info.job || '떠돌이'}</h3>
-            <p className="char-name">Lv.{info.age || '1'} {info.name || '용사'}</p>
-            <div className="card-info-box">
-              <div className="stat-row"><span className="stat-label">⚔️ 무기</span><span className="stat-value">{info.hobby || '맨주먹'}</span></div>
-              <div className="stat-row"><span className="stat-label">🛡️ 방어구</span><span className="stat-value">{info.defense || '맨몸'}</span></div>
-            </div>
-            {isLionGuild && <button onClick={() => { setStep('minigame_lion'); resetMinigame(); }} className="pixel-button guild-btn lion-btn">🦁 사자 길드 훈련장</button>}
-            {isMageGuild && <button onClick={() => { setStep('minigame_magic'); resetMagicGame(); }} className="pixel-button guild-btn mage-btn">🔮 지혜 마탑 훈련장</button>}
-            {isPriestGuild && <button onClick={() => { setStep('minigame_priest'); resetPriestGame(); }} className="pixel-button guild-btn priest-btn">🌙 신성 교단 훈련장</button>}
-          </div>
-          <button onClick={() => window.location.reload()} className="pixel-button retry-btn">다시 만들기</button>
+        <h2 className="pixel-text" style={{ fontSize: '24px' }}>🎉 용사 탄생! 🎉</h2>
         
+        <div className="character-card">
+            <p className="guild-name" style={{ color: '#e74c3c', fontSize: '18px' }}>[{getGuildName(finalType)} 소속]</p>
+            <div className="pixel-avatar">🧑‍🎤</div>
+            <h3 style={{ fontSize: '22px', color: '#1abc9c' }}>{enneagramTypes[finalType]}<br/>{info.job}</h3>
+            
+            <div className="card-info-box">
+            <div className="stat-row"><span>⚔️ 무기</span><span>{info.hobby}</span></div>
+            <div className="stat-row"><span>🛡️ 방어구</span><span>{info.defense}</span></div>
+            </div>
+
+            {/* 길드별 맞춤 색상 버튼 */}
+            {isLionGuild && <button onClick={() => setStep('minigame_lion')} className="pixel-button lion-btn">🦁 사자 길드 훈련장</button>}
+            {isMageGuild && <button onClick={() => setStep('minigame_magic')} className="pixel-button mage-btn">🔮 지혜 마탑 훈련장</button>}
+            {isPriestGuild && <button onClick={() => setStep('minigame_priest')} className="pixel-button priest-btn">🌙 신성 교단 훈련장</button>}
         </div>
-      );
+
+        <button onClick={() => window.location.reload()} className="pixel-button gray">다시 만들기</button>
+        </div>
+    );
     }
 
     if (step === 'minigame_lion') {
