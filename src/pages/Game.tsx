@@ -36,12 +36,26 @@ function Game() {
   const priestTimerRef = useRef<number | null>(null);
   const location = useLocation();
 
-    useEffect(() => {
-    // 관리자 페이지에서 보낸 shortcut 상태가 있으면 해당 step으로 즉시 변경
+  // 🚀 [수정 포인트] 관리자 페이지에서 넘어온 shortcut 처리 로직 보강
+  useEffect(() => {
     if (location.state && (location.state as any).shortcut) {
-        setStep((location.state as any).shortcut);
+      const targetStep = (location.state as any).shortcut;
+      setStep(targetStep);
+      
+      // 관리자 모드로 미니게임 진입 시 gameMode가 null이면 렌더링 오류가 날 수 있으므로 기본값 설정
+      if (!gameMode) {
+        setGameMode('arcade');
+      }
+      
+      // 결과창이나 미니게임에서 출력될 기본 정보가 없을 경우를 대비한 기본값 세팅
+      setInfo(prev => prev.name ? prev : { 
+        name: '관리자', age: '99', job: '용사', hobby: '전설의 검', defense: '실없는 농담하기' 
+      });
+
+      // 주소창의 state를 비워 뒤로가기 시 오작동 방지
+      window.history.replaceState({}, document.title);
     }
-    }, [location]);
+  }, [location, gameMode]);
 
   const selectMode = (mode: GameMode) => { setGameMode(mode); setStep('start'); };
   const handleInfoSubmit = (e: React.FormEvent) => { e.preventDefault(); setStep('test'); };
@@ -63,7 +77,10 @@ function Game() {
     }
   };
 
-  const getResultType = (): number => { if (Object.keys(answers).length === 0) return 9; return Number(Object.keys(answers).reduce((a, b) => answers[Number(a)] > answers[Number(b)] ? a : b)); };
+  const getResultType = (): number => { 
+    if (Object.keys(answers).length === 0) return 9; 
+    return Number(Object.keys(answers).reduce((a, b) => answers[Number(a)] > answers[Number(b)] ? a : b)); 
+  };
   
   const startWithCountdown = (startGameFn: () => void) => { 
     setCountdown(3); 
