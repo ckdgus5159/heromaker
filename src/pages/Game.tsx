@@ -338,7 +338,7 @@ function Game() {
               </>
             )}
             <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-            
+
           </div>
         </div>
       );
@@ -367,18 +367,15 @@ function Game() {
 
 return (
     <>
-      {/* 👑 상단 고정 상태창 */}
+      {/* 👑 상단 상태창 (main-content-wrapper 바깥 상단에 배치) */}
       <div className="header-status-bar">
         <div className="header-content">
-          {/* 중앙 타이틀 버튼 (홈으로) */}
           <div className="header-title" onClick={() => window.location.reload()}>
             나만의 용사 전설
           </div>
-
-          {/* 우측 이세계 버튼 (미니게임 종료 시에만 등장) */}
-          {(step === 'result' || 
-            (step === 'minigame_lion' && !isRunning && time > 0) || 
-            (step === 'minigame_magic' && magicStatus !== 'playing' && magicStatus !== 'idle') || 
+          {/* 깨어나기 버튼 조건부 렌더링 (기존 로직 유지) */}
+          {((step === 'minigame_lion' && !isRunning && time > 0) || 
+            (step === 'minigame_magic' && (magicStatus === 'win' || magicStatus === 'lose')) || 
             (step === 'minigame_priest' && priestStatus === 'end')
            ) && (
             <button onClick={handleWakeUp} className="header-wakeup-btn">
@@ -388,11 +385,12 @@ return (
         </div>
       </div>
 
+      {/* 🎮 게임 화면 본체 */}
       <div className="main-content-wrapper">
         {renderScreen()}
       </div>
 
-      {/* 커스텀 팝업 오버레이 */}
+      {/* 커스텀 팝업 (기존 동일) */}
       {customPopup && (
         <div className="custom-popup-overlay">
           <div className="custom-popup-box">
