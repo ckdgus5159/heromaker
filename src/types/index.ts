@@ -18,5 +18,5 @@ export interface Question {
 }
 
 // 모드 선택 및 깨어나기 단계 추가
-export type Step = 'mode_select' | 'start' | 'info' | 'test' | 'result' | 'minigame_lion' | 'minigame_magic' | 'minigame_priest' | 'wakeup';
+export type Step = 'mode_select' | 'start' | 'info' | 'test' | 'loading' | 'result' | 'minigame_lion' | 'minigame_magic' | 'minigame_priest' | 'wakeup';
 export type GameMode = 'npc' | 'arcade' | null;
