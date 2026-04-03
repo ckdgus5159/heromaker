@@ -248,12 +248,12 @@ function Game() {
     }
 
     if (step === 'loading') {
-      return (
-        <div className="game-container loading-screen" style={{ justifyContent: 'center' }}>
-          <div className="pixel-avatar bounce-anim">⏳</div>
-          <h2 className="pixel-text" style={{ fontSize: '20px', margin: '20px 0' }}>운명의 기록을 판독 중...</h2>
-          <p className="game-msg" style={{ color: '#bdc3c7' }}>분석 결과를 생성하고 있습니다.</p>
-        </div>
+        return (
+            <div className="game-container loading-screen" style={{ justifyContent: 'center' }}>
+            <div className="pixel-avatar bounce-anim">✨</div>
+            <h2 className="pixel-text" style={{ fontSize: '24px' }}>용사 기운 충전 중!</h2>
+            <p style={{ color: '#636e72' }}>조금만 기다려주세요!</p>
+            </div>
       );
     }
 
