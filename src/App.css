@@ -1,4 +1,4 @@
-/* 1. 폰트 설정 */
+/* 1. 폰트 및 기본 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @font-face {
@@ -12,7 +12,7 @@
   --bg-dark: #1a1a1a;        /* 전체 배경 */
   --container-bg: #2c3e50;   /* 메인 컨테이너 */
   --point-yellow: #f1c40f;   /* 포인트 텍스트 */
-  --point-green: #27ae60;    /* 메인 버튼 */
+  --point-green: #2ecc71;    /* 입력창 글씨/메인 버튼 */
   --border-light: #ecf0f1;   /* 테두리 */
   --box-black: #000000;      /* 질문 박스 배경 */
   --lion-red: #e67e22;       /* 사자 길드 빨강/오렌지 */
@@ -32,6 +32,7 @@ html, body {
   font-family: 'DungGeunMo', 'Press Start 2P', sans-serif;
   color: #fff;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 #root {
@@ -105,18 +106,19 @@ html, body {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
+  align-items: center; /* 가로 중앙 정렬 */
   text-align: center;
   box-sizing: border-box;
   overflow-y: auto;
   position: relative;
 }
 
-/* --- ✨ 메인 화면 (공간 분리 및 제목 확대) --- */
+/* --- ✨ 메인 화면 (공간 분리 및 중앙 정렬) --- */
 .title { 
   font-size: 48px; 
   color: var(--point-yellow);
   text-shadow: 3px 3px #c0392b;
-  margin-top: 20px;
+  margin-top: 40px; /* 제목 상단 여백 추가 */
   margin-bottom: 20px;
   line-height: 1.2;
 }
@@ -125,20 +127,21 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* 🌟 세로 중앙 정렬: 이미지와 시나리오를 중앙에 배치 */
   align-items: center;
   margin: 10px 0;
+  width: 100%;
 }
 
 .main-emoji {
   font-size: 100px; /* 아이콘 크기 대폭 확대 */
-  margin-bottom: 20px;
+  margin-bottom: 30px; /* 시나리오와 여백 확보 */
   animation: floatEmoji 2.5s ease-in-out infinite;
 }
 
 @keyframes floatEmoji {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-25px) rotate(8deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
@@ -151,7 +154,7 @@ html, body {
 
 /* --- 🔘 버튼 시스템 (너비 일정 + 길드 색상) --- */
 .pixel-button {
-  background-color: var(--point-green);
+  background-color: #27ae60; /* 기본 초록색 버튼 */
   border: none;
   border-bottom: 6px solid #1e8449;
   color: white;
@@ -190,8 +193,8 @@ html, body {
 .info-form input, .info-form select {
   width: 100%;
   padding: 14px;
-  background-color: rgba(0, 0, 0, 0.4); /* 투명 검정 복구 */
-  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4); /* 투명 검정 */
+  color: var(--point-green); /* 🌟 수정: 입력창 글씨를 초록색으로 복구 */
   border: 2px solid #7f8c8d;
   font-family: inherit;
   font-size: 16px;
@@ -208,6 +211,8 @@ html, body {
   justify-content: center;
   border-radius: 4px;
   margin-bottom: 25px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .question-text {
@@ -217,19 +222,43 @@ html, body {
   word-break: keep-all;
 }
 
-/* --- 🧑‍🎤 결과 카드 --- */
+/* --- 🧑‍🎤 결과 카드 (구역 분리 및 아이콘 확대) --- */
 .character-card {
   background: rgba(0, 0, 0, 0.3);
   border: 3px dashed var(--point-yellow);
   padding: 25px;
   margin: 20px 0;
   border-radius: 8px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 가로 중앙 정렬 */
+  box-sizing: border-box;
+}
+
+.guild-name-box {
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 .pixel-avatar {
-  font-size: 100px; /* 결과창 아이콘 확대 */
+  font-size: 120px; /* 🌟 아이콘 크기 확대 */
   margin: 20px 0;
   display: block;
+}
+
+.hero-title {
+  font-size: 24px;
+  color: #1abc9c;
+  margin-bottom: 15px;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.char-name {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 15px;
 }
 
 .card-info-box {
@@ -237,6 +266,8 @@ html, body {
   border-radius: 4px;
   padding: 15px;
   margin: 15px 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .stat-row {
@@ -263,18 +294,6 @@ html, body {
   to { transform: scale(1.15); }
 }
 
-/* 커스텀 팝업 */
-.custom-popup-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.8); display: flex;
-  justify-content: center; align-items: center; z-index: 1000;
-}
-
-.custom-popup-box {
-  background: var(--container-bg); border: 4px solid var(--border-light);
-  padding: 30px; text-align: center; border-radius: 8px; width: 80%; max-width: 350px;
-}
-
 /* 📱 모바일 대응 */
 @media (max-width: 500px) {
   .header-status-bar, .main-content-wrapper {
@@ -283,5 +302,5 @@ html, body {
     border-right: none;
   }
   .title { font-size: 38px; }
-  .main-emoji, .pixel-avatar { font-size: 80px; }
+  .main-emoji, .pixel-avatar { font-size: 100px; }
 }
