@@ -339,6 +339,35 @@ html, body {
   to { transform: scale(1.15); }
 }
 
+/* 결과창 아이콘 전용 구역 디자인 */
+.card-avatar-zone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-bottom: 20px; /* 텍스트와 겹치지 않게 여백 확보 */
+}
+
+.type-icon-display, .hero-icon-display {
+  font-size: 80px; /* 아이콘 크기 확대 */
+  /* 🌟 결과창 아이콘에는 애니메이션을 제거하여 텍스트 가독성 확보 */
+  animation: none !important; 
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));
+}
+
+/* 메인 화면 검과 방패 전용 애니메이션 (기존 floatEmoji 유지) */
+.main-emoji {
+  font-size: 100px;
+  animation: floatEmoji 2.5s ease-in-out infinite;
+}
+
+@keyframes floatEmoji {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(8deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
 /* 📱 모바일 대응 */
 @media (max-width: 500px) {
   .header-status-bar, .main-content-wrapper {
