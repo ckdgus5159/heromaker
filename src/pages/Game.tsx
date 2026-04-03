@@ -16,22 +16,18 @@ function Game() {
   const [currentQ, setCurrentQ] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
 
-  // 커스텀 팝업 메시지 상태
   const [customPopup, setCustomPopup] = useState<string | null>(null);
 
-  // --- 🦁 사자 길드 미니게임 변수 ---
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [gameResultMsg, setGameResultMsg] = useState('');
   const timerRef = useRef<number | null>(null);
 
-  // --- 🔮 마탑 길드 미니게임 변수 ---
   const [magicTime, setMagicTime] = useState(10.0);
   const [magicPower, setMagicPower] = useState(0); 
   const [magicStatus, setMagicStatus] = useState<'idle' | 'playing' | 'win' | 'lose'>('idle');
   const magicTimerRef = useRef<number | null>(null);
 
-  // --- 🌙 신성 교단 미니게임 변수 ---
   const [priestTime, setPriestTime] = useState(10.0);
   const [priestScore, setPriestScore] = useState(0);
   const [priestStatus, setPriestStatus] = useState<'idle' | 'playing' | 'end'>('idle');
@@ -46,148 +42,43 @@ function Game() {
     };
   }, []);
 
-  const selectMode = (mode: GameMode) => {
-    setGameMode(mode);
-    setStep('start');
-  };
-
+  const selectMode = (mode: GameMode) => { setGameMode(mode); setStep('start'); };
   const handleInfoSubmit = (e: React.FormEvent) => { e.preventDefault(); setStep('test'); };
-
+  
   const handleAnswer = (type: number) => {
     const newAnswers = { ...answers, [type]: (answers[type] || 0) + 1 };
     setAnswers(newAnswers);
     setChoiceHistory(prev => [...prev, { q: questions[currentQ].id, type }]);
-
-    if (currentQ < questions.length - 1) {
-      setCurrentQ(currentQ + 1);
-    } else {
+    if (currentQ < questions.length - 1) { setCurrentQ(currentQ + 1); } 
+    else {
       setStep('loading');
-      
       setTimeout(async () => {
         const finalType = Number(Object.keys(newAnswers).reduce((a, b) => newAnswers[Number(a)] > newAnswers[Number(b)] ? a : b) || 9);
-        
-        const { data, error } = await supabase.from('heroes').insert([
-          {
-            mode: gameMode, name: info.name, age: info.age, job: info.job, hobby: info.hobby, defense: info.defense,
-            enneagram_type: finalType, choices: choiceHistory
-          }
-        ]).select();
-
+        const { data, error } = await supabase.from('heroes').insert([{ mode: gameMode, name: info.name, age: info.age, job: info.job, hobby: info.hobby, defense: info.defense, enneagram_type: finalType, choices: choiceHistory }]).select();
         if (error) console.error("DB 저장 에러:", error);
         if (data) setDbId(data[0].id);
-        
         setStep('result');
       }, 1500);
     }
   };
 
-  const getResultType = (): number => {
-    if (Object.keys(answers).length === 0) return 9; 
-    return Number(Object.keys(answers).reduce((a, b) => answers[Number(a)] > answers[Number(b)] ? a : b));
-  };
+  const getResultType = (): number => { if (Object.keys(answers).length === 0) return 9; return Number(Object.keys(answers).reduce((a, b) => answers[Number(a)] > answers[Number(b)] ? a : b)); };
+  const startWithCountdown = (startGameFn: () => void) => { setCountdown(3); let currentCount = 3; const interval = setInterval(() => { currentCount -= 1; if (currentCount > 0) { setCountdown(currentCount); } else { clearInterval(interval); setCountdown(null); startGameFn(); } }, 1000); };
 
-  const startWithCountdown = (startGameFn: () => void) => {
-    setCountdown(3);
-    let currentCount = 3;
-    const interval = setInterval(() => {
-      currentCount -= 1;
-      if (currentCount > 0) { setCountdown(currentCount); } 
-      else { clearInterval(interval); setCountdown(null); startGameFn(); }
-    }, 1000);
-  };
-
-  // --- 미니게임 로직들 ---
-  const startMinigame = () => {
-    setTime(0); setIsRunning(true); setGameResultMsg('');
-    const start = Date.now();
-    timerRef.current = window.setInterval(() => setTime(Date.now() - start), 10);
-  };
-
-  const stopMinigame = () => {
-    setIsRunning(false); if (timerRef.current) clearInterval(timerRef.current);
-    const diff = Math.abs((time / 1000) - 7.77);
-    if (diff === 0) { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); setGameResultMsg('🎉 완벽합니다! 전설의 사자 전사! 🎉'); } 
-    else if (diff <= 0.1) setGameResultMsg('대단합니다! 간발의 차이!');
-    else setGameResultMsg('훈련이 더 필요하겠군요.');
-  };
-
+  const startMinigame = () => { setTime(0); setIsRunning(true); setGameResultMsg(''); const start = Date.now(); timerRef.current = window.setInterval(() => setTime(Date.now() - start), 10); };
+  const stopMinigame = () => { setIsRunning(false); if (timerRef.current) clearInterval(timerRef.current); const diff = Math.abs((time / 1000) - 7.77); if (diff === 0) { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); setGameResultMsg('🎉 완벽합니다! 전설의 사자 전사! 🎉'); } else if (diff <= 0.1) setGameResultMsg('대단합니다! 간발의 차이!'); else setGameResultMsg('훈련이 더 필요하겠군요.'); };
   const resetMinigame = () => { setTime(0); setIsRunning(false); setGameResultMsg(''); if (timerRef.current) clearInterval(timerRef.current); };
-
-  const startMagicGame = () => {
-    setMagicTime(10.0); setMagicPower(0); setMagicStatus('playing');
-    magicTimerRef.current = window.setInterval(() => {
-      setMagicTime((prev) => {
-        if (prev <= 0.1) { clearInterval(magicTimerRef.current!); setMagicStatus('lose'); return 0; }
-        return prev - 0.1;
-      });
-      setMagicPower((prev) => Math.max(0, prev - 0.5));
-    }, 100);
-  };
-
-  const handleChantClick = () => {
-    if (magicStatus !== 'playing') return;
-    setMagicPower((prev) => {
-      const nextPower = prev + 1; 
-      if (nextPower >= 50) { clearInterval(magicTimerRef.current!); setMagicStatus('win'); }
-      return nextPower;
-    });
-  };
-
+  const startMagicGame = () => { setMagicTime(10.0); setMagicPower(0); setMagicStatus('playing'); magicTimerRef.current = window.setInterval(() => { setMagicTime((prev) => { if (prev <= 0.1) { clearInterval(magicTimerRef.current!); setMagicStatus('lose'); return 0; } return prev - 0.1; }); setMagicPower((prev) => Math.max(0, prev - 0.5)); }, 100); };
+  const handleChantClick = () => { if (magicStatus !== 'playing') return; setMagicPower((prev) => { const nextPower = prev + 1; if (nextPower >= 50) { clearInterval(magicTimerRef.current!); setMagicStatus('win'); } return nextPower; }); };
   const resetMagicGame = () => { setMagicTime(10.0); setMagicPower(0); setMagicStatus('idle'); setCountdown(null); if (magicTimerRef.current) clearInterval(magicTimerRef.current); };
-
-  const startPriestGame = () => {
-    setPriestTime(10.0); setPriestScore(0); setPriestStatus('playing'); setActiveTile(null);
-    priestTimerRef.current = window.setInterval(() => {
-      setPriestTime(prev => {
-        if (prev <= 0.1) { clearInterval(priestTimerRef.current!); setPriestStatus('end'); setActiveTile(null); return 0; }
-        return prev - 0.1;
-      });
-    }, 100);
-  };
-
-  useEffect(() => {
-    let spawnInterval: number;
-    if (priestStatus === 'playing') {
-      spawnInterval = window.setInterval(() => {
-        const randomTile = Math.floor(Math.random() * 16);
-        setActiveTile(randomTile);
-        setTimeout(() => setActiveTile(current => current === randomTile ? null : current), 500);
-      }, 600); 
-    }
-    return () => clearInterval(spawnInterval);
-  }, [priestStatus]);
-
-  const handleTileClick = (index: number) => {
-    if (priestStatus !== 'playing') return;
-    if (activeTile === index) { setPriestScore(prev => prev + 1); setActiveTile(null); }
-  };
-
+  const startPriestGame = () => { setPriestTime(10.0); setPriestScore(0); setPriestStatus('playing'); setActiveTile(null); priestTimerRef.current = window.setInterval(() => { setPriestTime(prev => { if (prev <= 0.1) { clearInterval(priestTimerRef.current!); setPriestStatus('end'); setActiveTile(null); return 0; } return prev - 0.1; }); }, 100); };
+  useEffect(() => { let spawnInterval: number; if (priestStatus === 'playing') { spawnInterval = window.setInterval(() => { const randomTile = Math.floor(Math.random() * 16); setActiveTile(randomTile); setTimeout(() => setActiveTile(current => current === randomTile ? null : current), 500); }, 600); } return () => clearInterval(spawnInterval); }, [priestStatus]);
+  const handleTileClick = (index: number) => { if (priestStatus !== 'playing') return; if (activeTile === index) { setPriestScore(prev => prev + 1); setActiveTile(null); } };
   const resetPriestGame = () => { setPriestTime(10.0); setPriestScore(0); setPriestStatus('idle'); setActiveTile(null); setCountdown(null); if (priestTimerRef.current) clearInterval(priestTimerRef.current); };
+  const handleWakeUp = () => { if (gameMode === 'npc') setStep('wakeup'); else setCustomPopup('차원의 문이 열렸습니다. \n 다음 스테이지로 이동하세요.'); };
+  const submitPhoneNumber = async (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); const phone = new FormData(e.currentTarget).get('phone') as string; const { error } = await supabase.from('heroes').update({ phone_number: phone }).eq('id', dbId); if (error) { console.error("DB 업데이트 에러:", error); setCustomPopup('기록 중 오류가 발생했습니다. \n 다시 시도해주세요.'); } else { setCustomPopup('정보가 성공적으로 기록되었습니다. \n 현실 세계에서 뵙겠습니다!'); } };
+  const closePopupAndReload = () => { setCustomPopup(null); window.location.reload(); };
 
-  const handleWakeUp = () => {
-    if (gameMode === 'npc') setStep('wakeup');
-    else setCustomPopup('차원의 문이 열렸습니다. \n 다음 스테이지로 이동하세요.');
-  };
-
-  const submitPhoneNumber = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const phone = new FormData(e.currentTarget).get('phone') as string;
-    const { error } = await supabase.from('heroes').update({ phone_number: phone }).eq('id', dbId);
-    
-    if (error) {
-      console.error("DB 업데이트 에러:", error);
-      setCustomPopup('기록 중 오류가 발생했습니다. \n 다시 시도해주세요.');
-    } else {
-      setCustomPopup('정보가 성공적으로 기록되었습니다. \n 현실 세계에서 뵙겠습니다!');
-    }
-  };
-
-  const closePopupAndReload = () => {
-    setCustomPopup(null);
-    window.location.reload();
-  };
-
-  // --- 화면 렌더링 도우미 ---
   const renderScreen = () => {
     if (step === 'mode_select') {
       return (
@@ -201,25 +92,21 @@ function Game() {
         </div>
       );
     }
-    if (step === 'start') {
-    return (
-        <div className="game-container start-screen">
-        <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
-        
-        <div className="hero-graphic">
-            <div className="main-emoji">🗡️🛡️</div>
-            <p className="subtitle" style={{ fontSize: '18px', lineHeight: '1.6' }}>
-            평화롭던 마을에 드리운 어둠...<br/>
-            세계의 운명이 당신의 선택에 달렸다.
-            </p>
-        </div>
 
-        <div className="button-area">
-            <button onClick={() => setStep('info')} className="pixel-button">게임 시작</button>
+    if (step === 'start') {
+      return (
+        <div className="game-container start-screen">
+          <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
+          {/* 🌟 수정: hero-graphic의 여백 조정을 통해 검과 방패를 위로 올림 */}
+          <div className="hero-graphic" style={{ marginTop: '-20px' }}>
+            <div className="main-emoji">🗡️🛡️</div>
+            <p className="lore-text">평화롭던 마을에 드리운 어둠...<br/>세계의 운명이 당신의 선택에 달렸다.<br/><br/>자신만의 무기와 방어구를 갖추고<br/>운명의 길드로 향하라!</p>
+          </div>
+          <button onClick={() => setStep('info')} className="pixel-button">게임 시작</button>
         </div>
-        </div>
-    );
+      );
     }
+
     if (step === 'info') {
       return (
         <div className="game-container info-screen">
@@ -254,87 +141,68 @@ function Game() {
         </div>
       );
     }
+
     if (step === 'loading') {
-        return (
-        <div className="game-container loading-screen">
-            {/* 상단: 글씨 구역 */}
-            <div className="loading-text-zone">
-            <h2 className="pixel-text loading-title">운명의 기록 판독 중</h2>
-            <p className="loading-subtitle">당신의 성향을 분석하여 최적의 인생 캐릭터를 생성하고 있습니다.</p>
-            </div>
-            
-            {/* 하단: 아이콘 구역 (글씨와 겹치지 않게 분리) */}
-            <div className="loading-icon-zone">
-            {/* 모래시계 대신 귀여운 도트 용사/장비 아이콘으로 변경 */}
-            <div className="pixel-avatar loading-char-anim">⚔️🛡️🧑‍🎤</div>
-            </div>
+      return (
+        <div className="game-container loading-screen" style={{ justifyContent: 'center' }}>
+          <div className="pixel-avatar bounce-anim">⏳</div>
+          <h2 className="pixel-text" style={{ fontSize: '20px', margin: '20px 0' }}>운명의 기록을 판독 중...</h2>
+          <p className="game-msg" style={{ color: '#bdc3c7' }}>분석 결과를 생성하고 있습니다.</p>
         </div>
-        );
+      );
     }
 
     const finalType = getResultType();
+    const fullTypeName = enneagramTypes[finalType] || "🕊️ 평화의 수도사";
+    const typeIcon = fullTypeName.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\s|[^\s\w\d]+/g)?.[0] || "👤";
+    const typeNameOnly = fullTypeName.replace(typeIcon, "").trim();
+
     const isLionGuild = [8, 9, 1].includes(finalType);
     const isMageGuild = [5, 6, 7].includes(finalType);
     const isPriestGuild = [2, 3, 4].includes(finalType);
 
     if (step === 'result') {
-    return (
+      return (
         <div className="game-container result-screen">
-        <h2 className="pixel-text" style={{ fontSize: '24px' }}>🎉 용사 탄생! 🎉</h2>
-        
-        <div className="character-card">
-            <p className="guild-name" style={{ color: '#e74c3c', fontSize: '18px' }}>[{getGuildName(finalType)} 소속]</p>
-            <div className="pixel-avatar">🧑‍🎤</div>
-            <h3 style={{ fontSize: '22px', color: '#1abc9c' }}>{enneagramTypes[finalType]}<br/>{info.job}</h3>
-            
-            <div className="card-info-box">
-            <div className="stat-row"><span>⚔️ 무기</span><span>{info.hobby}</span></div>
-            <div className="stat-row"><span>🛡️ 방어구</span><span>{info.defense}</span></div>
+          <h2 className="pixel-text">🎉 용사 탄생! 🎉</h2>
+          <div className="character-card">
+            {/* 🌟 수정: 아이콘을 글씨 구역과 분리하여 상단 전용 구역에 배치 */}
+            <div className="card-avatar-zone">
+               <span className="type-icon-large">{typeIcon}</span>
+               <span className="hero-icon-large">🐱‍👤</span> {/* 🌟 수정: 더 귀여운 닌자 고양이 용사 아이콘 */}
             </div>
 
-            {/* 길드별 맞춤 색상 버튼 */}
-            {isLionGuild && <button onClick={() => setStep('minigame_lion')} className="pixel-button lion-btn">🦁 사자 길드 훈련장</button>}
-            {isMageGuild && <button onClick={() => setStep('minigame_magic')} className="pixel-button mage-btn">🔮 지혜 마탑 훈련장</button>}
-            {isPriestGuild && <button onClick={() => setStep('minigame_priest')} className="pixel-button priest-btn">🌙 신성 교단 훈련장</button>}
+            <p className="guild-name">[{getGuildName(finalType)} 소속]</p>
+            {/* 🌟 수정: 텍스트에 아이콘이 겹치지 않게 순수 텍스트만 렌더링 */}
+            <h3 className="hero-title">{typeNameOnly}<br/>{info.job || '떠돌이'}</h3>
+            <p className="char-name">Lv.{info.age || '1'} {info.name || '용사'}</p>
+            
+            <div className="card-info-box">
+              <div className="stat-row"><span className="stat-label">⚔️ 무기</span><span className="stat-value">{info.hobby || '맨주먹'}</span></div>
+              <div className="stat-row"><span className="stat-label">🛡️ 방어구</span><span className="stat-value">{info.defense || '맨몸'}</span></div>
+            </div>
+            {isLionGuild && <button onClick={() => { setStep('minigame_lion'); resetMinigame(); }} className="pixel-button guild-btn lion-btn">🦁 사자 길드 훈련장</button>}
+            {isMageGuild && <button onClick={() => { setStep('minigame_magic'); resetMagicGame(); }} className="pixel-button guild-btn mage-btn">🔮 지혜 마탑 훈련장</button>}
+            {isPriestGuild && <button onClick={() => { setStep('minigame_priest'); resetPriestGame(); }} className="pixel-button guild-btn priest-btn">🌙 신성 교단 훈련장</button>}
+          </div>
+          <button onClick={() => window.location.reload()} className="pixel-button retry-btn">다시 만들기</button>
         </div>
-
-        <button onClick={() => window.location.reload()} className="pixel-button gray">다시 만들기</button>
-        </div>
-    );
+      );
     }
 
-// --- 🦁 사자 길드 훈련장 화면 ---
-  if (step === 'minigame_lion') {
-    return (
-      <div className="game-container minigame-screen">
-        <h2 className="pixel-text">사자 길드 훈련장</h2>
-        <div className="lore-box">
-          <p><strong>7.77초</strong>의 타이밍을 노려 일격을 가하라!</p>
+    if (step === 'minigame_lion') {
+      return (
+        <div className="game-container minigame-screen">
+          <h2 className="pixel-text">사자 길드 훈련장</h2>
+          <div className="lore-box"><p><strong>7.77초</strong>의 타이밍을 노려 일격을 가하라!</p></div>
+          <div className="timer-box"><div className="timer-display">{(time / 1000).toFixed(2)}</div><p className="game-msg">{gameResultMsg || 'STOP 타이밍을 노리세요!'}</p></div>
+          <div className="answer-buttons">
+            {!isRunning ? <button onClick={startMinigame} className="pixel-button start-btn">START</button> : <button onClick={stopMinigame} className="pixel-button stop-btn">STOP</button>}
+            <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
+          </div>
         </div>
-        <div className="timer-box">
-          <div className="timer-display">{(time / 1000).toFixed(2)}</div>
-          <p className="game-msg">{gameResultMsg || 'STOP 타이밍을 노리세요!'}</p>
-        </div>
-        <div className="answer-buttons">
-          {!isRunning ? (
-            <>
-              {/* 게임 시작 전 혹은 종료 후에 START 버튼 표시 */}
-              <button onClick={startMinigame} className="pixel-button start-btn">START</button>
-              
-              {/* ✅ 여기서 resetMinigame을 사용하여 오류를 해결합니다! */}
-              {time > 0 && (
-                <button onClick={resetMinigame} className="pixel-button gray">다시 도전</button>
-              )}
-            </>
-          ) : (
-            <button onClick={stopMinigame} className="pixel-button stop-btn">STOP</button>
-          )}
-          
-          <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-        </div>
-      </div>
-    );
-  }
+      );
+    }
 
     if (step === 'minigame_magic') {
       return (
@@ -375,7 +243,6 @@ function Game() {
               </>
             )}
             <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-
           </div>
         </div>
       );
@@ -402,15 +269,14 @@ function Game() {
     return null;
   };
 
-return (
+  return (
     <>
-      {/* 👑 상단 상태창 (main-content-wrapper 바깥 상단에 배치) */}
+      {/* 👑 상단 고정 상태창 */}
       <div className="header-status-bar">
         <div className="header-content">
           <div className="header-title" onClick={() => window.location.reload()}>
             나만의 용사 전설
           </div>
-          {/* 깨어나기 버튼 조건부 렌더링 (기존 로직 유지) */}
           {((step === 'minigame_lion' && !isRunning && time > 0) || 
             (step === 'minigame_magic' && (magicStatus === 'win' || magicStatus === 'lose')) || 
             (step === 'minigame_priest' && priestStatus === 'end')
@@ -422,12 +288,10 @@ return (
         </div>
       </div>
 
-      {/* 🎮 게임 화면 본체 */}
       <div className="main-content-wrapper">
         {renderScreen()}
       </div>
 
-      {/* 커스텀 팝업 (기존 동일) */}
       {customPopup && (
         <div className="custom-popup-overlay">
           <div className="custom-popup-box">

@@ -269,53 +269,50 @@ html, body {
   width: 100%;
   box-sizing: border-box;
 }
-.loading-screen {
-  display: flex;
-  flex-direction: column; /* 🌟 위아래로 구역 분리 */
-  justify-content: center; /* 세로 중앙 정렬 */
-  align-items: center; /* 가로 중앙 정렬 */
-  padding: 40px 20px;
-  box-sizing: border-box;
-}
 
-.loading-text-zone {
-  margin-bottom: 30px; /* 아이콘 구역과의 여백 */
-  width: 100%;
-  z-index: 10; /* 글씨가 위에 오도록 */
-}
-.loading-title {
-  font-size: 28px;
-  color: var(--point-yellow);
-  text-shadow: 2px 2px #c0392b;
-  margin-bottom: 15px;
-}
-
-.loading-subtitle {
-  font-size: 16px;
-  color: #bdc3c7;
-  line-height: 1.6;
-  word-break: keep-all;
-  margin: 0;
-}
-
-/* 하단 아이콘 구역 */
-.loading-icon-zone {
+/* 용사 아이콘 전용 구역 (글씨와 안 겹치도록 카드 상단에 배치) */
+.card-avatar-zone {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 10px; /* 카드 상단 여백 */
+  margin-bottom: 20px; /* 아래 정보와의 여백 */
+  box-sizing: border-box;
 }
 
-/* 귀여운 도트 용사 애니메이션 (글씨를 가리지 않는 크기로 조절) */
-.loading-char-anim {
-  font-size: 80px; /* 🌟 이전보다 작게 조절하여 글씨 공간 확보 */
+/* 🌟 이전의 .pixel-avatar 스타일을 완전히 대체하거나 아래 스타일로 수정하세요 🌟 */
+.pixel-avatar {
+  font-size: 80px; /* 🌟 아이콘 크기를 더 크게 조정 (가려지지 않으니 키워도 됨) */
+  color: var(--secondary-color);
   margin: 0;
-  animation: loadingFloat 1.5s ease-in-out infinite;
+  display: block;
+  animation: cardCharBounce 1.5s infinite alternate ease-in-out;
+  /* 도트 느낌 Drop Shadow 효과 */
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));
 }
 
-@keyframes loadingFloat {
-  0%, 100% { transform: translateY(0px) rotate(-5deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
+@keyframes cardCharBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+/* 🌟 에니어그램 유형 아이콘 (👑, ⚔️ 등) 도 동일한 크기로 설정 */
+.card-avatar-zone span, 
+.card-avatar-zone div,
+.character-card .card-avatar-zone {
+  font-size: 80px;
+  animation: cardCharBounce 1.5s infinite alternate-reverse ease-in-out; /* 엇박자 애니메이션 */
+}
+
+/* 🌟 .char-name 스타일 수정: 뒤에 아이콘이 안 붙도록 text-align과 여백 조정 */
+.character-card .char-name {
+  font-size: 18px;
+  color: var(--border-color);
+  font-weight: bold;
+  text-align: center; /* 중앙 정렬 */
+  margin-bottom: 20px;
+  width: 100%;
 }
 
 .stat-row {
