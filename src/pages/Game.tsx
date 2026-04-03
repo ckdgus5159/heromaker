@@ -367,9 +367,34 @@ function Game() {
     return null;
   };
 
-  return (
+return (
     <>
-      {renderScreen()}
+      {/* 👑 상단 고정 상태창 */}
+      <div className="header-status-bar">
+        <div className="header-content">
+          {/* 중앙 타이틀 버튼 (홈으로) */}
+          <div className="header-title" onClick={() => window.location.reload()}>
+            나만의 용사 전설
+          </div>
+
+          {/* 우측 이세계 버튼 (미니게임 종료 시에만 등장) */}
+          {(step === 'result' || 
+            (step === 'minigame_lion' && !isRunning && time > 0) || 
+            (step === 'minigame_magic' && magicStatus !== 'playing' && magicStatus !== 'idle') || 
+            (step === 'minigame_priest' && priestStatus === 'end')
+           ) && (
+            <button onClick={handleWakeUp} className="header-wakeup-btn">
+              🔮 깨어나기
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="main-content-wrapper">
+        {renderScreen()}
+      </div>
+
+      {/* 커스텀 팝업 오버레이 */}
       {customPopup && (
         <div className="custom-popup-overlay">
           <div className="custom-popup-box">
