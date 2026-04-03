@@ -20,7 +20,7 @@
   --priest-yellow: #f1c40f;  
 }
 
-/* 📱 기초 레이아웃: 모바일 스크롤 가능하도록 수정 */
+/* 📱 기초 레이아웃: 여백 최소화 및 스크롤 허용 */
 html, body {
   margin: 0;
   padding: 0;
@@ -31,7 +31,6 @@ html, body {
   background-size: 20px 20px;
   font-family: 'DungGeunMo', 'Press Start 2P', sans-serif;
   color: #fff;
-  /* 가로 스크롤 방지 및 세로 스크롤 허용 */
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -46,13 +45,16 @@ html, body {
   width: 100%;
 }
 
-/* --- 👑 상단 고정 상태창: Sticky로 변경하여 스크롤 시에도 상단 유지 --- */
+/* --- 👑 상단 고정 상태창: 높이 50px 절대 고정 로직 --- */
 .header-status-bar {
   position: sticky;
   top: 0;
   width: 100%;
   max-width: 480px;
-  height: 60px;
+  /* 🌟 높이 고정 및 flex 수축 방지 */
+  height: 50px !important; 
+  min-height: 50px !important;
+  flex-shrink: 0; 
   background-color: var(--container-bg);
   border: 4px solid var(--border-light);
   border-top: none;
@@ -69,12 +71,12 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 10px;
   position: relative;
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 16px; /* 크기 약간 축소 */
   color: var(--point-yellow);
   cursor: pointer;
   text-shadow: 2px 2px #000;
@@ -82,13 +84,13 @@ html, body {
 
 .header-wakeup-btn {
   position: absolute;
-  right: 10px;
+  right: 8px;
   background: #8e44ad;
   border: 2px solid #fff;
   color: #fff;
   font-family: 'DungGeunMo';
-  font-size: 11px;
-  padding: 6px 8px;
+  font-size: 10px;
+  padding: 4px 6px;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -109,23 +111,22 @@ html, body {
   background-color: var(--container-bg);
   border: 4px solid var(--border-light);
   border-top: none;
-  padding: 20px;
+  padding: 10px 15px; /* 세로 패딩 대폭 축소 (기존 20px) */
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  /* 모바일에서 내용이 길어지면 스크롤이 발생하도록 설정 */
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 50px);
 }
 
-/* --- ✨ 메인 화면: clamp로 유연한 폰트/간격 적용 --- */
+/* --- ✨ 메인 화면: 여백 최소화 디자인 --- */
 .title { 
-  font-size: clamp(28px, 10vw, 38px); 
+  font-size: clamp(20px, 7vw, 30px); /* 최대 크기 축소 */
   color: var(--point-yellow);
-  text-shadow: 3px 3px #c0392b;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  line-height: 1.2;
+  text-shadow: 2px 2px #c0392b;
+  margin-top: 10px;    /* 마진 축소 */
+  margin-bottom: 10px; /* 마진 축소 */
+  line-height: 1.1;
 }
 
 .hero-graphic {
@@ -135,46 +136,47 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10px 0;
+  margin: 5px 0; /* 마진 축소 */
 }
 
 .main-emoji {
-  font-size: clamp(60px, 20vw, 100px);
-  margin-bottom: clamp(20px, 10vh, 100px);
+  font-size: clamp(50px, 15vw, 80px); /* 크기 축소 */
+  margin-bottom: 15px; /* 기존 20px~100px에서 대폭 축소 */
   animation: floatEmoji 2.5s ease-in-out infinite;
 }
 
 @keyframes floatEmoji {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(8deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
 }
 
 .subtitle {
-  font-size: clamp(14px, 4vw, 16px);
+  font-size: 14px;
   color: #bdc3c7;
-  line-height: 1.6;
+  line-height: 1.4;
   word-break: keep-all;
+  margin-bottom: 10px;
 }
 
-/* --- 🔘 버튼 시스템: 터치 최적화 --- */
+/* --- 🔘 버튼 시스템: 높이 및 간격 압축 --- */
 .pixel-button {
   background-color: var(--point-green);
   border: none;
-  border-bottom: 6px solid #1e8449;
+  border-bottom: 4px solid #1e8449; /* 두께 축소 */
   color: white;
-  padding: 18px 10px;
-  font-size: 18px;
+  padding: 12px 10px; /* 패딩 축소 (기존 18px) */
+  font-size: 16px;
   font-family: 'DungGeunMo';
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 8px; /* 간격 축소 */
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
-  touch-action: manipulation; /* 터치 지연 방지 */
+  touch-action: manipulation;
 }
 
 .pixel-button:active {
-  transform: translateY(4px);
+  transform: translateY(2px);
   border-bottom-width: 2px;
 }
 
@@ -182,63 +184,63 @@ html, body {
 .mage-btn { background-color: var(--mage-blue); border-bottom-color: #2980b9; }
 .priest-btn { background-color: var(--priest-yellow); border-bottom-color: #f39c12; color: #000; }
 .gray { background-color: #34495e; border-bottom-color: #2c3e50; }
-.option-btn { text-align: left; font-size: 16px; margin-top: 12px; }
+.option-btn { text-align: left; font-size: 15px; margin-top: 8px; }
 
 /* --- 📝 입력창 & 질문 박스 --- */
 .info-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin: 20px 0;
+  gap: 10px; /* 간격 축소 */
+  margin: 10px 0;
 }
 
 .info-form input, .info-form select {
   width: 100%;
-  padding: 14px;
+  padding: 10px; /* 패딩 축소 */
   background-color: rgba(0, 0, 0, 0.4);
   color: var(--point-green); 
   border: 2px solid #7f8c8d;
   font-family: 'DungGeunMo';
-  font-size: 16px;
+  font-size: 15px;
   box-sizing: border-box;
 }
 
 .question-box {
   background-color: var(--box-black);
   border: 3px solid var(--border-light);
-  padding: clamp(15px, 5vw, 20px);
-  min-height: 80px;
+  padding: 12px 15px; /* 패딩 축소 */
+  min-height: 60px;   /* 최소 높이 축소 */
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .question-text {
-  font-size: clamp(15px, 4.5vw, 17px);
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
-/* --- ⏳ 로딩 화면 (겹침 방지) --- */
+/* --- ⏳ 로딩 화면 (압축) --- */
 .loading-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 300px;
-  padding: 40px 20px;
+  min-height: 200px;
+  padding: 20px;
 }
 
 .loading-text-zone {
-  margin-bottom: clamp(30px, 8vh, 50px);
+  margin-bottom: 20px;
 }
 
 .bounce-anim {
-  font-size: clamp(50px, 15vw, 80px);
+  font-size: 50px;
   animation: bounce 1s infinite alternate;
 }
 
@@ -246,8 +248,8 @@ html, body {
 .character-card {
   background: rgba(0, 0, 0, 0.3);
   border: 3px dashed var(--point-yellow);
-  padding: 20px;
-  margin: 15px 0;
+  padding: 12px;
+  margin: 5px 0;
   border-radius: 8px;
   width: 100%;
   display: flex;
@@ -261,45 +263,41 @@ html, body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: clamp(80px, 20vw, 120px);
-  margin-bottom: 20px;
+  height: 70px; /* 높이 축소 */
+  margin-bottom: 10px;
 }
 
 .hero-icon-large {
-  font-size: clamp(60px, 20vw, 100px);
-  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
+  font-size: 60px; /* 크기 축소 */
 }
 
 .hero-title {
-  font-size: clamp(18px, 5vw, 20px);
-  margin-bottom: 10px;
+  font-size: 18px;
+  margin-bottom: 5px;
   color: #1abc9c;
 }
 
 .card-info-box {
   background: rgba(0, 0, 0, 0.5);
   border-radius: 4px;
-  padding: 15px;
-  margin: 10px 0;
+  padding: 8px;
+  margin: 5px 0;
   width: 100%;
   box-sizing: border-box;
 }
 
 .stat-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding-bottom: 8px;
-  font-size: 14px;
+  margin: 5px 0;
+  padding-bottom: 4px;
+  font-size: 13px;
 }
 
-/* --- 🎮 미니게임 타이머 박스 --- */
+/* --- 🎮 미니게임 타이머 박스 (압축) --- */
 .timer-box {
   background-color: var(--box-black) !important;
   border: 4px solid var(--border-light) !important;
-  padding: 20px 10px;
-  margin: 15px 0;
+  padding: 15px 10px;
+  margin: 10px 0;
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
@@ -307,65 +305,45 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 180px;
+  min-height: 140px; /* 최소 높이 축소 */
 }
 
 .timer-display, .magic-time, .priest-header {
   font-family: 'Press Start 2P', cursive !important;
-  font-size: clamp(20px, 7vw, 30px) !important;
+  font-size: clamp(18px, 6vw, 24px) !important; /* 크기 축소 */
   color: var(--point-yellow) !important;
   text-shadow: 2px 2px #c0392b;
-  margin-bottom: 15px;
-  word-break: break-all;
+  margin-bottom: 10px;
 }
 
 /* 마탑 게이지 */
 .power-bar-container {
   width: 100%;
-  height: 25px;
+  height: 20px; /* 두께 축소 */
   background-color: #34495e;
   border: 3px solid var(--border-light);
   border-radius: 15px;
   overflow: hidden;
-  margin: 15px 0;
-}
-
-.power-bar-fill {
-  height: 100%;
-  background-color: var(--mage-blue);
-  transition: width 0.1s ease-out;
+  margin: 10px 0;
 }
 
 /* 교단 타일 그리드 */
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(5px, 2vw, 10px);
+  gap: 6px;
   width: 100%;
-  max-width: 280px;
-  margin-top: 10px;
+  max-width: 240px;
+  margin-top: 5px;
 }
 
-.tile {
-  aspect-ratio: 1;
-  background-color: #34495e;
-  border: 2px solid var(--border-light);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.tile.active {
-  background-color: var(--priest-yellow);
-  box-shadow: 0 0 10px var(--priest-yellow);
-}
-
-/* 📱 모바일 적응형: 화면 높이가 낮은 기기 대응 */
-@media (max-height: 650px) {
-  .title { margin-top: 10px; margin-bottom: 10px; }
-  .main-emoji { margin-bottom: 20px; }
-  .game-container { padding: 10px; }
-  .question-box { margin-bottom: 10px; }
-  .pixel-button { padding: 12px 10px; margin-top: 8px; }
+/* 📱 모바일 적응형: 화면 높이가 낮은 기기 대응 (초압축) */
+@media (max-height: 700px) {
+  .title { font-size: 20px; margin: 5px 0; }
+  .main-emoji { margin-bottom: 10px; }
+  .game-container { padding: 5px 12px; }
+  .pixel-button { padding: 10px; margin-top: 5px; font-size: 14px; }
+  .question-box { margin-bottom: 10px; min-height: 50px; }
 }
 
 /* 데스크탑 뷰 최적화 (가로 너비 제한) */

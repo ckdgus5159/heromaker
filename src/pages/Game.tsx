@@ -4,6 +4,7 @@ import '../App.css';
 import type { UserInfo, Step, GameMode } from '../types';
 import { questions, enneagramTypes, getGuildName } from '../data/enneagram';
 import { supabase } from '../lib/supabase';
+import { useLocation } from 'react-router-dom'; // useLocation 추가
 
 function Game() {
   const [step, setStep] = useState<Step>('mode_select');
@@ -33,14 +34,14 @@ function Game() {
   const [priestStatus, setPriestStatus] = useState<'idle' | 'playing' | 'end'>('idle');
   const [activeTile, setActiveTile] = useState<number | null>(null);
   const priestTimerRef = useRef<number | null>(null);
+  const location = useLocation();
 
-  useEffect(() => {
-    return () => { 
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (magicTimerRef.current) clearInterval(magicTimerRef.current);
-      if (priestTimerRef.current) clearInterval(priestTimerRef.current);
-    };
-  }, []);
+    useEffect(() => {
+    // 관리자 페이지에서 보낸 shortcut 상태가 있으면 해당 step으로 즉시 변경
+    if (location.state && (location.state as any).shortcut) {
+        setStep((location.state as any).shortcut);
+    }
+    }, [location]);
 
   const selectMode = (mode: GameMode) => { setGameMode(mode); setStep('start'); };
   const handleInfoSubmit = (e: React.FormEvent) => { e.preventDefault(); setStep('test'); };
