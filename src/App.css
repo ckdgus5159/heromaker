@@ -360,9 +360,9 @@ html, body {
 }
 
 /* 📱 모바일 적응형: 화면 높이가 낮은 기기 대응 */
-@media (max-height: 650px) {
+@media (max-height: 550px) {
   .title { margin-top: 10px; margin-bottom: 10px; }
-  .main-emoji { margin-bottom: 20px; }
+  .main-emoji { margin-bottom: 00px; }
   .game-container { padding: 10px; }
   .question-box { margin-bottom: 10px; }
   .pixel-button { padding: 12px 10px; margin-top: 8px; }
