@@ -1,4 +1,4 @@
-/* 폰트 설정 (네오둥근모 및 영문 픽셀 폰트) */
+/* 1. 폰트 및 애니메이션 정의 (네오둥근모 필수 적용) */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @font-face {
     font-family: 'NeoDunggeunmo';
@@ -29,15 +29,19 @@ html, body {
   background-size: 25px 25px;
   font-family: 'NeoDunggeunmo', 'Press Start 2P', cursive;
   color: var(--border-color);
-  overflow-x: hidden;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 #root {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; /* 세로 중앙 정렬 */
   min-height: 100vh;
   width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* --- 👑 상단 고정 상태창 (둥글둥글 스타일) --- */
@@ -99,21 +103,23 @@ html, body {
   max-width: 480px;
   display: flex;
   flex-direction: column;
+  justify-content: center; /* 세로 중앙 정렬 */
   margin-bottom: 20px;
 }
 
 .game-container {
-  flex: 1;
   background: var(--panel-color);
   border: 4px solid var(--border-color);
   border-radius: 20px; /* 귀여운 둥근 테두리 */
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   text-align: center;
   box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
   position: relative;
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 /* --- 💎 텍스트 및 버튼 디테일 --- */
@@ -121,6 +127,7 @@ html, body {
   color: var(--accent-color);
   text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--border-color);
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .title { 
@@ -139,6 +146,7 @@ html, body {
   color: #636e72;
   line-height: 1.5;
   margin-bottom: 25px;
+  word-break: keep-all;
 }
 
 .pixel-button {
@@ -152,8 +160,10 @@ html, body {
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
+  width: 100%; /* 버튼 꽉 차게 */
   box-shadow: 0 6px 0 var(--border-color);
   transition: all 0.1s;
+  box-sizing: border-box;
 }
 
 .pixel-button:active {
@@ -163,6 +173,7 @@ html, body {
 
 .pixel-button.pink { background: #fab1a0; }
 .pixel-button.gray { background: #dfe6e9; }
+.pixel-button.option-btn { background: #fff; text-align: left; font-size: 16px; padding: 14px 18px; }
 
 /* --- 🧑‍🎤 결과창 캐릭터 카드 (포토카드 스타일) --- */
 .character-card {
@@ -174,6 +185,8 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .guild-name {
@@ -199,6 +212,7 @@ html, body {
   padding: 15px;
   width: 100%;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 
 .stat-row {
@@ -245,13 +259,6 @@ html, body {
   box-shadow: 0 10px 0 rgba(0,0,0,0.2);
 }
 
-/* --- 📱 모바일 대응 --- */
-@media (max-width: 500px) {
-  .header-status-bar { width: 100%; border-radius: 0; }
-  .main-content-wrapper { width: 100%; padding: 75px 15px 20px 15px; box-sizing: border-box; }
-  .title { font-size: 32px; }
-}
-
 /* --- 🎮 미니게임 요소들 (마탑, 교단 등) --- */
 .timer-box {
   background: #f1f2f6;
@@ -259,6 +266,8 @@ html, body {
   border-radius: 15px;
   padding: 20px;
   margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .power-bar-container {
@@ -267,6 +276,7 @@ html, body {
   border: 3px solid var(--border-color);
   border-radius: 10px;
   overflow: hidden;
+  width: 100%;
 }
 
 .power-bar-fill {
@@ -282,6 +292,8 @@ html, body {
   padding: 10px;
   border-radius: 12px;
   border: 3px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .tile {
@@ -294,4 +306,27 @@ html, body {
 .tile.active {
   background: var(--accent-color);
   box-shadow: inset -4px -4px 0 rgba(0,0,0,0.2);
+}
+
+/* 폼 입력 요소 */
+.info-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+input, select {
+  width: 100%;
+  padding: 14px;
+  background: #fff;
+  color: var(--border-color);
+  border: 3px solid var(--border-color);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* --- 📱 모바일 대응 --- */
+@media (max-width: 500px) {
+  .header-status-bar { width: 100%; border-radius: 0; }
+  .main-content-wrapper { width: 100%; padding: 75px 0 20px 0; }
+  .title { font-size: 30px; }
+  .game-container { padding: 20px 15px; border-radius: 15px; }
+  .stat-label, .stat-value { font-size: 13px; }
 }
