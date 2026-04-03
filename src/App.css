@@ -135,7 +135,7 @@ html, body {
 
 .main-emoji {
   font-size: 100px; /* 아이콘 크기 대폭 확대 */
-  margin-bottom: 30px; /* 시나리오와 여백 확보 */
+  margin-bottom: 50px; /* 시나리오와 여백 확보 */
   animation: floatEmoji 2.5s ease-in-out infinite;
 }
 
