@@ -44,6 +44,7 @@ function Game() {
 
   const selectMode = (mode: GameMode) => { setGameMode(mode); setStep('start'); };
   const handleInfoSubmit = (e: React.FormEvent) => { e.preventDefault(); setStep('test'); };
+  
   const handleAnswer = (type: number) => {
     const newAnswers = { ...answers, [type]: (answers[type] || 0) + 1 };
     setAnswers(newAnswers);
@@ -60,6 +61,7 @@ function Game() {
       }, 1500);
     }
   };
+
   const getResultType = (): number => { if (Object.keys(answers).length === 0) return 9; return Number(Object.keys(answers).reduce((a, b) => answers[Number(a)] > answers[Number(b)] ? a : b)); };
   const startWithCountdown = (startGameFn: () => void) => { setCountdown(3); let currentCount = 3; const interval = setInterval(() => { currentCount -= 1; if (currentCount > 0) { setCountdown(currentCount); } else { clearInterval(interval); setCountdown(null); startGameFn(); } }, 1000); };
 
@@ -95,7 +97,6 @@ function Game() {
       return (
         <div className="game-container start-screen">
           <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
-          {/* 🌟 수정: hero-graphic의 margin을 조절하여 칼과 방패 아이콘을 위로 올림 */}
           <div className="hero-graphic" style={{ marginTop: '-40px' }}>
             <div className="main-emoji">🗡️🛡️</div>
             <p className="subtitle" style={{ fontSize: '18px', lineHeight: '1.6' }}>
@@ -145,12 +146,17 @@ function Game() {
       );
     }
 
+    /* 🌟 수정: 로딩창 구조를 분리하여 텍스트와 아이콘 겹침 방지 */
     if (step === 'loading') {
       return (
-        <div className="game-container loading-screen" style={{ justifyContent: 'center' }}>
-          <div className="pixel-avatar bounce-anim">✨</div>
-          <h2 className="pixel-text" style={{ fontSize: '24px' }}>용사 기운 충전 중!</h2>
-          <p style={{ color: '#636e72' }}>조금만 기다려주세요!</p>
+        <div className="game-container loading-screen">
+          <div className="loading-text-zone">
+            <h2 className="pixel-text" style={{ fontSize: '24px' }}>용사 기운 충전 중!</h2>
+            <p className="subtitle" style={{ color: '#bdc3c7' }}>운명의 기록을 판독하고 있습니다...</p>
+          </div>
+          <div className="loading-icon-zone">
+            <div className="pixel-avatar bounce-anim">⏳</div>
+          </div>
         </div>
       );
     }
@@ -167,20 +173,15 @@ function Game() {
     if (step === 'result') {
       return (
         <div className="game-container result-screen">
-          <h2 className="pixel-text" style={{ fontSize: '24px' }}>🎉 용사 탄생! 🎉</h2>
-          
+          <h2 className="pixel-text">🎉 용사 탄생! 🎉</h2>
           <div className="character-card">
-            {/* 🌟 수정: 아이콘 전용 구역을 카드 상단에 배치 (텍스트와 가려지지 않게 함) */}
+            {/* 🌟 수정: 용사 아이콘 하나만 나오게 정리 */}
             <div className="card-avatar-zone">
-              <span className="type-icon-display">{typeIcon}</span>
-              <span className="hero-icon-display">🧑‍🎤</span> {/* 기존 용사 아이콘으로 복구 */}
+              <span className="hero-icon-large">🧑‍🎤</span>
             </div>
 
-            <p className="guild-name" style={{ color: '#e74c3c', fontSize: '18px', margin: '10px 0' }}>
-              [{getGuildName(finalType)} 소속]
-            </p>
+            <p className="guild-name">[{getGuildName(finalType)} 소속]</p>
             
-            {/* 🌟 수정: 텍스트 구역에 아이콘을 섞지 않아 겹침 방지 */}
             <h3 className="hero-title" style={{ fontSize: '22px', color: '#1abc9c' }}>
               {typeNameOnly}<br/>{info.job}
             </h3>
@@ -191,12 +192,11 @@ function Game() {
               <div className="stat-row"><span>📊 레벨</span><span>Lv.{info.age} {info.name}</span></div>
             </div>
 
-            {isLionGuild && <button onClick={() => setStep('minigame_lion')} className="pixel-button lion-btn">🦁 사자 길드 훈련장</button>}
-            {isMageGuild && <button onClick={() => setStep('minigame_magic')} className="pixel-button mage-btn">🔮 지혜 마탑 훈련장</button>}
-            {isPriestGuild && <button onClick={() => setStep('minigame_priest')} className="pixel-button priest-btn">🌙 신성 교단 훈련장</button>}
+            {isLionGuild && <button onClick={() => { setStep('minigame_lion'); resetMinigame(); }} className="pixel-button lion-btn">🦁 사자 길드 훈련장</button>}
+            {isMageGuild && <button onClick={() => { setStep('minigame_magic'); resetMagicGame(); }} className="pixel-button mage-btn">🔮 지혜 마탑 훈련장</button>}
+            {isPriestGuild && <button onClick={() => { setStep('minigame_priest'); resetPriestGame(); }} className="pixel-button priest-btn">🌙 신성 교단 훈련장</button>}
           </div>
-
-          <button onClick={() => window.location.reload()} className="pixel-button gray">다시 만들기</button>
+          <button onClick={() => window.location.reload()} className="pixel-button retry-btn">다시 만들기</button>
         </div>
       );
     }
