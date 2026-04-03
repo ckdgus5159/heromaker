@@ -136,7 +136,7 @@ html, body {
 
 .main-emoji {
   font-size: 100px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   animation: floatEmoji 2.5s ease-in-out infinite;
 }
 
