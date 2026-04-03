@@ -1,68 +1,56 @@
-/* 1. 폰트 및 애니메이션 정의 (네오둥근모 필수 적용) */
+/* 1. 초기 디자인에서 사용된 폰트 및 기본 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @font-face {
-    font-family: 'NeoDunggeunmo';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/NeoDunggeunmoPro-Regular.woff') format('woff');
+    font-family: 'DungGeunMo';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
-/* 🌈 귀염뽀짝 테마 컬러 변수 */
 :root {
-  --bg-color: #fdf6e3;      /* 따뜻한 베이지 배경 */
-  --panel-color: #ffffff;   /* 깔끔한 흰색 패널 */
-  --accent-color: #ff7675;   /* 귀여운 코랄 레드 */
-  --primary-color: #55efc4;   /* 싱그러운 민트 */
-  --secondary-color: #a29bfe; /* 몽글몽글한 보라 */
-  --border-color: #2d3436;    /* 부드러운 검정 테두리 */
+  --bg-dark: #1a1a1a;        /* 초기 배경색 */
+  --container-bg: #2c3e50;   /* 초기 컨테이너 색상 */
+  --point-yellow: #f1c40f;   /* 초기 포인트 노란색 */
+  --point-green: #27ae60;    /* 초기 버튼 초록색 */
+  --border-light: #ecf0f1;   /* 초기 테두리 색상 */
 }
 
-/* 전체 레이아웃 설정 */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--bg-color);
-  /* 귀여운 도트 패턴 배경 */
-  background-image: radial-gradient(var(--secondary-color) 1px, transparent 1px);
-  background-size: 25px 25px;
-  font-family: 'NeoDunggeunmo', 'Press Start 2P', cursive;
-  color: var(--border-color);
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 20px 20px;
+  font-family: 'DungGeunMo', 'Press Start 2P', sans-serif;
+  color: #fff;
   overflow: hidden;
-  box-sizing: border-box;
 }
 
 #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* 세로 중앙 정렬 */
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
 }
 
-/* --- 👑 상단 고정 상태창 (둥글둥글 스타일) --- */
+/* --- 👑 상단 고정 상태창 (초기 색상 + 일체형 너비) --- */
 .header-status-bar {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 480px;
+  width: 100%;
+  max-width: 480px; /* 요청하신 대로 게임 화면 너비에 맞춤 */
   height: 60px;
-  background: var(--panel-color);
-  border: 4px solid var(--border-color);
+  background-color: var(--container-bg);
+  border: 4px solid var(--border-light);
   border-top: none;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
-  box-shadow: 0 6px 0 rgba(0,0,0,0.1);
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 
 .header-content {
@@ -76,257 +64,127 @@ html, body {
 
 .header-title {
   font-size: 18px;
-  color: var(--accent-color);
-  text-shadow: 1px 1px 0px #fff, 2px 2px 0px var(--border-color);
+  color: var(--point-yellow);
   cursor: pointer;
+  text-shadow: 2px 2px #000;
 }
 
 .header-wakeup-btn {
   position: absolute;
   right: 10px;
-  background: var(--secondary-color);
-  border: 3px solid var(--border-color);
+  background: #8e44ad; /* 깨어나기 보라색 포인트 유지 */
+  border: 2px solid #fff;
   color: #fff;
-  font-family: 'NeoDunggeunmo';
-  font-size: 11px;
-  padding: 6px 8px;
+  font-family: 'DungGeunMo';
+  font-size: 12px;
+  padding: 5px 8px;
   cursor: pointer;
-  border-radius: 8px;
-  box-shadow: 0 3px 0 var(--border-color);
+  border-radius: 4px;
 }
 
-/* --- 🎮 메인 콘텐츠 본체 --- */
+/* --- 🎮 메인 콘텐츠 (여백 제거 및 일체형 구성) --- */
 .main-content-wrapper {
-  padding-top: 80px; /* 헤더 공간 확보 */
   flex: 1;
-  width: 90%;
+  width: 100%;
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 세로 중앙 정렬 */
-  margin-bottom: 20px;
+  margin-top: -4px; /* 상단바와 테두리 겹쳐서 일체화 */
 }
 
 .game-container {
-  background: var(--panel-color);
-  border: 4px solid var(--border-color);
-  border-radius: 20px; /* 귀여운 둥근 테두리 */
-  padding: 30px 20px;
+  flex: 1;
+  background-color: var(--container-bg);
+  border: 4px solid var(--border-light);
+  border-top: none;
+  padding: 40px 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   text-align: center;
-  box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
-  position: relative;
-  overflow-y: auto;
   box-sizing: border-box;
+  overflow-y: auto;
+  position: relative;
 }
 
-/* --- 💎 텍스트 및 버튼 디테일 --- */
+/* --- 💎 초기 디자인 텍스트 및 버튼 스타일 --- */
 .pixel-text {
-  color: var(--accent-color);
-  text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--border-color);
-  margin-bottom: 20px;
-  width: 100%;
+  color: var(--point-yellow);
+  text-shadow: 2px 2px #c0392b;
+  margin-bottom: 15px;
 }
 
-.title { 
-  font-size: 40px; 
-  line-height: 1.2; 
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.subtitle {
-  font-size: 16px;
-  color: #636e72;
-  line-height: 1.5;
-  margin-bottom: 25px;
-  word-break: keep-all;
-}
+.title { font-size: 32px; }
 
 .pixel-button {
-  background: var(--primary-color);
-  border: 4px solid var(--border-color);
-  border-radius: 12px;
-  color: var(--border-color);
+  background-color: var(--point-green);
+  border: none;
+  border-bottom: 6px solid #1e8449;
+  color: white;
   padding: 16px;
   font-size: 18px;
-  font-family: 'NeoDunggeunmo';
-  font-weight: bold;
+  font-family: 'DungGeunMo';
   cursor: pointer;
-  margin-top: 10px;
-  width: 100%; /* 버튼 꽉 차게 */
-  box-shadow: 0 6px 0 var(--border-color);
-  transition: all 0.1s;
-  box-sizing: border-box;
+  margin-top: 15px;
+  border-radius: 4px;
 }
 
 .pixel-button:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 var(--border-color);
+  border-bottom-width: 2px;
 }
 
-.pixel-button.pink { background: #fab1a0; }
-.pixel-button.gray { background: #dfe6e9; }
-.pixel-button.option-btn { background: #fff; text-align: left; font-size: 16px; padding: 14px 18px; }
+.pixel-button.pink { background-color: #e84393; border-bottom-color: #ae1f63; }
+.pixel-button.gray { background-color: #7f8c8d; border-bottom-color: #34495e; }
 
-/* --- 🧑‍🎤 결과창 캐릭터 카드 (포토카드 스타일) --- */
+/* 캐릭터 카드 (초기 점선 스타일) */
 .character-card {
-  background: #f1f2f6;
-  border: 4px solid var(--border-color);
-  border-radius: 20px;
-  padding: 25px 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 3px dashed var(--point-yellow);
+  padding: 25px;
   margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.guild-name {
-  background: var(--secondary-color);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  border: 2px solid var(--border-color);
-  margin-bottom: 15px;
-}
-
-.pixel-avatar {
-  font-size: 70px;
-  margin-bottom: 15px;
-  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.1));
-}
-
-.card-info-box {
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  padding: 15px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
+  border-radius: 8px;
 }
 
 .stat-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 2px dashed #dfe6e9;
+  margin: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 8px;
 }
 
-.stat-row:last-child { border: none; }
-.stat-label { color: #636e72; font-size: 14px; }
-.stat-value { color: var(--secondary-color); font-weight: bold; }
+.stat-label { color: #bdc3c7; font-size: 15px; }
+.stat-value { color: #fff; font-weight: bold; }
 
-/* --- ⏳ 로딩 화면 애니메이션 --- */
+/* --- ⏳ 로딩 및 기타 요소 --- */
 .bounce-anim {
   font-size: 60px;
-  animation: loading-bounce 1s infinite alternate;
+  animation: bounce 1.2s infinite;
 }
 
-@keyframes loading-bounce {
-  from { transform: scale(1); }
-  to { transform: scale(1.2); }
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
 }
 
-/* --- 🔔 커스텀 팝업 디자인 --- */
-.custom-popup-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.custom-popup-box {
-  background: var(--panel-color);
-  border: 4px solid var(--border-color);
-  border-radius: 20px;
-  padding: 30px;
-  text-align: center;
-  width: 85%;
-  max-width: 320px;
-  box-shadow: 0 10px 0 rgba(0,0,0,0.2);
-}
-
-/* --- 🎮 미니게임 요소들 (마탑, 교단 등) --- */
-.timer-box {
-  background: #f1f2f6;
-  border: 4px solid var(--border-color);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.power-bar-container {
-  height: 25px;
-  background: #dfe6e9;
-  border: 3px solid var(--border-color);
-  border-radius: 10px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.power-bar-fill {
-  height: 100%;
-  background: var(--primary-color);
-}
-
-.tile-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  background: #dfe6e9;
-  padding: 10px;
-  border-radius: 12px;
-  border: 3px solid var(--border-color);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.tile {
-  aspect-ratio: 1;
-  background: #b2bec3;
-  border-radius: 8px;
-  border: 2px solid var(--border-color);
-}
-
-.tile.active {
-  background: var(--accent-color);
-  box-shadow: inset -4px -4px 0 rgba(0,0,0,0.2);
-}
-
-/* 폼 입력 요소 */
-.info-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+/* 폼 입력 */
 input, select {
   width: 100%;
   padding: 14px;
-  background: #fff;
-  color: var(--border-color);
-  border: 3px solid var(--border-color);
-  border-radius: 8px;
+  background: #000;
+  color: #2ecc71;
+  border: 3px solid #7f8c8d;
   font-family: inherit;
   font-size: 16px;
+  margin-bottom: 10px;
   box-sizing: border-box;
 }
 
-/* --- 📱 모바일 대응 --- */
+/* 모바일 대응 */
 @media (max-width: 500px) {
-  .header-status-bar { width: 100%; border-radius: 0; }
-  .main-content-wrapper { width: 100%; padding: 75px 0 20px 0; }
-  .title { font-size: 30px; }
-  .game-container { padding: 20px 15px; border-radius: 15px; }
-  .stat-label, .stat-value { font-size: 13px; }
+  .header-status-bar, .main-content-wrapper {
+    max-width: 100%;
+    border-left: none;
+    border-right: none;
+  }
 }
