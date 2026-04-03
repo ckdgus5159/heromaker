@@ -296,19 +296,38 @@ function Game() {
     );
     }
 
-    if (step === 'minigame_lion') {
-      return (
-        <div className="game-container minigame-screen">
-          <h2 className="pixel-text">사자 길드 훈련장</h2>
-          <div className="lore-box"><p><strong>7.77초</strong>의 타이밍을 노려 일격을 가하라!</p></div>
-          <div className="timer-box"><div className="timer-display">{(time / 1000).toFixed(2)}</div><p className="game-msg">{gameResultMsg || 'STOP 타이밍을 노리세요!'}</p></div>
-          <div className="answer-buttons">
-            {!isRunning ? <button onClick={startMinigame} className="pixel-button start-btn">START</button> : <button onClick={stopMinigame} className="pixel-button stop-btn">STOP</button>}
-            <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-          </div>
+// --- 🦁 사자 길드 훈련장 화면 ---
+  if (step === 'minigame_lion') {
+    return (
+      <div className="game-container minigame-screen">
+        <h2 className="pixel-text">사자 길드 훈련장</h2>
+        <div className="lore-box">
+          <p><strong>7.77초</strong>의 타이밍을 노려 일격을 가하라!</p>
         </div>
-      );
-    }
+        <div className="timer-box">
+          <div className="timer-display">{(time / 1000).toFixed(2)}</div>
+          <p className="game-msg">{gameResultMsg || 'STOP 타이밍을 노리세요!'}</p>
+        </div>
+        <div className="answer-buttons">
+          {!isRunning ? (
+            <>
+              {/* 게임 시작 전 혹은 종료 후에 START 버튼 표시 */}
+              <button onClick={startMinigame} className="pixel-button start-btn">START</button>
+              
+              {/* ✅ 여기서 resetMinigame을 사용하여 오류를 해결합니다! */}
+              {time > 0 && (
+                <button onClick={resetMinigame} className="pixel-button gray">다시 도전</button>
+              )}
+            </>
+          ) : (
+            <button onClick={stopMinigame} className="pixel-button stop-btn">STOP</button>
+          )}
+          
+          <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
+        </div>
+      </div>
+    );
+  }
 
     if (step === 'minigame_magic') {
       return (
