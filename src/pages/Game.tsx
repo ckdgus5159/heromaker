@@ -490,13 +490,16 @@ if (step === 'minigame_magic') {
       <div className="header-status-bar">
         <div className="header-content">
           <div className="header-title" onClick={() => window.location.reload()}>나만의 용사 전설</div>
-          {((step === 'minigame_lion' && !isRunning && time > 0) || 
-            (step === 'minigame_magic' && (magicStatus === 'win' || magicStatus === 'lose')) || 
-            (step === 'minigame_priest' && priestStatus === 'end')
-           ) && (
-            <button onClick={handleWakeUp} className="header-wakeup-btn">🔮 깨어나기</button>
-          )}
-        </div>
+    {(
+          // 1. 기존 조건: 미니게임 단계에서 게임이 끝났을 때
+          (step.includes('minigame') && !isRunning && (time > 0 || magicStatus !== 'playing' || priestStatus !== 'playing')) || 
+          
+          // 2. 추가 조건: 게임장 모드이면서 결과창(캐릭터 설명창)일 때 바로 노출
+          (gameMode === 'arcade' && step === 'result')
+        ) && (
+          <button onClick={handleWakeUp} className="header-wakeup-btn">🔮 깨어나기</button>
+        )}
+      </div>
       </div>
       <div className="main-content-wrapper">{renderScreen()}</div>
       {customPopup && (
