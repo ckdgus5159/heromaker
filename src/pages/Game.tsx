@@ -214,9 +214,11 @@ function Game() {
               세계의 운명이 당신의 선택에 달렸다.
             </p>
           </div>
-          <div className="button-area">
-            <button onClick={() => setStep('info')} className="pixel-button">게임 시작</button>
-          </div>
+        <div className="button-area" style={{ marginTop: '0' }}>
+          <button onClick={() => setStep('info')} className="pixel-button">
+            게임 시작
+          </button>
+        </div>
         </div>
       );
     }
