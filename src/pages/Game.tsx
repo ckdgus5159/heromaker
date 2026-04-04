@@ -99,7 +99,7 @@ function Game() {
   const startMinigame = () => { setTime(0); setIsRunning(true); setGameResultMsg(''); const start = Date.now(); timerRef.current = window.setInterval(() => setTime(Date.now() - start), 10); };
   const stopMinigame = () => { setIsRunning(false); if (timerRef.current) clearInterval(timerRef.current); const diff = Math.abs((time / 1000) - 7.77); if (diff === 0) { confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); setGameResultMsg('🎉 완벽합니다! 전설의 사자 전사! 🎉'); } else if (diff <= 0.1) setGameResultMsg('대단합니다! 간발의 차이!'); else setGameResultMsg('훈련이 더 필요하겠군요.'); };
   const resetMinigame = () => { setTime(0); setIsRunning(false); setGameResultMsg(''); if (timerRef.current) clearInterval(timerRef.current); };
-  
+  const magicGoal = gameMode === 'npc' ? 60 : 30; // 변수 추가
   const startMagicGame = () => { setMagicTime(10.0); setMagicPower(0); setMagicStatus('playing'); magicTimerRef.current = window.setInterval(() => { setMagicTime((prev) => { if (prev <= 0.1) { clearInterval(magicTimerRef.current!); setMagicStatus('lose'); return 0; } return prev - 0.1; }); setMagicPower((prev) => Math.max(0, prev - 0.5)); }, 100); };
   const handleChantClick = () => {
   if (magicStatus !== 'playing') return;
@@ -108,7 +108,7 @@ function Game() {
   // 함수형 업데이트(prev => prev + 1)를 사용하고 계시므로 로직은 정확합니다.
   setMagicPower((prev) => {
     const nextPower = prev + 1;
-    if (nextPower >= 50) {
+    if (nextPower >= magicGoal) {
       if (magicTimerRef.current) clearInterval(magicTimerRef.current);
       setMagicStatus('win');
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
@@ -300,7 +300,6 @@ if (step === 'start') {
     const fullTypeName = enneagramTypes[finalType] || "🕊️ 평화의 수도사";
     const typeIcon = fullTypeName.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\s|[^\s\w\d]+/g)?.[0] || "👤";
     const typeNameOnly = fullTypeName.replace(typeIcon, "").trim();
-
     const isLionGuild = [8, 9, 1].includes(finalType);
     const isMageGuild = [5, 6, 7].includes(finalType);
     const isPriestGuild = [2, 3, 4].includes(finalType);
@@ -364,46 +363,74 @@ if (step === 'start') {
       );
     }
 
-    if (step === 'minigame_magic') {
-      return (
-        <div className="game-container minigame-screen">
-          <h2 className="pixel-text">지혜 마탑 훈련장</h2>
-          <div className="lore-box">
-            <p><strong>"쏟아지는 마력을 감당할 지혜가 있는가?"</strong></p>
-            <p style={{ fontSize: '14px', color: '#bdc3c7', marginTop: '5px' }}>
-              마왕을 무찌르기 위해 제한 시간 내 마법을 난사하세요!!
-            </p>
-          </div>
-          <div className="timer-box mage-theme">
-            <div className="magic-time">{magicTime.toFixed(1)}초</div>
-            <div className="power-bar-container"><div className="power-bar-fill" style={{ width: `${Math.min(100, (magicPower / 50) * 100)}%` }}></div></div>
-            <p className="game-msg">50회 영창하세요!</p>
-          </div>
-          <div className="answer-buttons">
-            {countdown !== null ? ( <div className="countdown-display">{countdown}</div> ) : (
-              <>
-                {magicStatus === 'idle' && <button onClick={() => startWithCountdown(startMagicGame)} className="pixel-button start-btn">영창 시작</button>}
-                {magicStatus !== 'idle' && (
-                  <button 
-                    /* onClick 대신 onPointerDown 사용 시 반응 속도가 훨씬 빠릅니다 */
-                    onPointerDown={(e) => {
-                      e.preventDefault(); // 브라우저 기본 동작 방지
-                      handleChantClick();
-                    }}
-                    className={`pixel-button chant-btn ${magicStatus !== 'playing' ? 'disabled' : ''}`} 
-                    disabled={magicStatus !== 'playing'}
-                  >
-                    영창 연타!!!
-                  </button>
-                )}
-                {(magicStatus === 'win' || magicStatus === 'lose') && <button onClick={resetMagicGame} className="pixel-button start-btn">다시 도전</button>}
-              </>
-            )}
-            <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
-          </div>
+if (step === 'minigame_magic') {
+  // 🚀 1. 모드에 따른 목표 횟수 설정
+  const magicGoal = gameMode === 'npc' ? 60 : 30;
+
+  return (
+    <div className="game-container minigame-screen">
+      <h2 className="pixel-text">지혜 마탑 훈련장</h2>
+      <div className="lore-box">
+        <p><strong>"쏟아지는 마력을 감당할 지혜가 있는가?"</strong></p>
+        <p style={{ fontSize: '14px', color: '#bdc3c7', marginTop: '5px' }}>
+          마왕을 무찌르기 위해 제한 시간 내 마법을 난사하세요!!
+        </p>
+      </div>
+
+      <div className="timer-box mage-theme">
+        <div className="magic-time">{magicTime.toFixed(1)}초</div>
+        
+        {/* 🚀 2. 게이지 바: 부모 컨테이너(power-bar-container) 안에 배치해야 정상 출력됩니다 */}
+        <div className="power-bar-container">
+          <div 
+            className="power-bar-fill" 
+            style={{ width: `${(magicPower / magicGoal) * 100}%` }}
+          ></div>
         </div>
-      );
-    }
+        
+        {/* 🚀 3. 문구 변경 및 목표 횟수 동적 표시 */}
+        <p className="game-msg" style={{ fontSize: '16px' }}>
+          {magicGoal}번 주문 난사!!! ({magicPower}/{magicGoal})
+        </p>
+      </div>
+
+      <div className="answer-buttons">
+        {countdown !== null ? ( 
+          <div className="timer-display" style={{ fontSize: '40px' }}>{countdown}</div> 
+        ) : (
+          <>
+            {magicStatus === 'idle' && (
+              <button onClick={() => startWithCountdown(startMagicGame)} className="pixel-button start-btn">
+                영창 시작
+              </button>
+            )}
+            
+            {magicStatus !== 'idle' && (
+              <button 
+                onPointerDown={(e) => {
+                  e.preventDefault(); 
+                  handleChantClick();
+                }}
+                /* 🚀 4. 승리 조건 함수(handleChantClick) 내에서도 magicGoal을 참조하도록 로직을 확인하세요 */
+                className={`pixel-button chant-btn ${magicStatus !== 'playing' ? 'disabled' : ''}`} 
+                disabled={magicStatus !== 'playing'}
+              >
+                주문 난사!!!
+              </button>
+            )}
+            
+            {(magicStatus === 'win' || magicStatus === 'lose') && (
+              <button onClick={resetMagicGame} className="pixel-button start-btn">
+                다시 도전
+              </button>
+            )}
+          </>
+        )}
+        <button onClick={() => setStep('result')} className="pixel-button gray">결과로 돌아가기</button>
+      </div>
+    </div>
+  );
+}
 
     if (step === 'minigame_priest') {
       return (

@@ -447,7 +447,7 @@ html, body {
 
 .timer-display, .magic-time, .priest-header {
   font-family: 'Press Start 2P', cursive !important;
-  font-size: clamp(20px, 7vw, 30px) !important;
+  font-size: clamp(16px, 7vw, 24px) !important;
   color: var(--point-yellow) !important;
   text-shadow: 2px 2px #c0392b;
   margin-bottom: 15px;
