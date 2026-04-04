@@ -139,15 +139,55 @@ function Game() {
     setStep('wakeup'); 
   };
   
-  const submitPhoneNumber = async (e: React.FormEvent<HTMLFormElement>) => { 
-    e.preventDefault(); 
-    const phone = new FormData(e.currentTarget).get('phone') as string; 
-    const { error } = await supabase.from('heroes').update({ phone_number: phone }).eq('id', dbId); 
-    if (error) { console.error("DB 업데이트 에러:", error); setCustomPopup('기록 중 오류가 발생했습니다. \n 다시 시도해주세요.'); } 
-    else { setCustomPopup('정보가 성공적으로 기록되었습니다. \n 현실 세계에서 뵙겠습니다!'); } 
+  const submitPhoneNumber = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    let phone = formData.get('phone') as string;
+
+    // 🚀 [수정] 모든 특수문자(하이픈, 공백 등) 제거하여 숫자만 남김
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+
+    // 번호 유효성 검사 (최소 10자 이상)
+    if (cleanPhone.length < 10) {
+      setCustomPopup('전화번호가 너무 짧습니다. \n 정확한 번호를 입력해주세요.');
+      return;
+    }
+
+    if (!dbId) {
+      setCustomPopup('오류: 용사 데이터가 없습니다. \n 처음부터 다시 시도해주세요.');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('heroes')
+        .update({ phone_number: cleanPhone }) // 정제된 번호 저장
+        .eq('id', dbId)
+        .select();
+
+      if (error || !data?.length) {
+        console.error("DB 업데이트 에러:", error);
+        // 🚀 실패 시 전용 팝업 (이후 새로고침 안 함)
+        setCustomPopup('기록 중 오류가 발생했습니다. \n 다시 한번 시도해주세요.');
+      } else {
+        // 🚀 성공 시 전용 팝업 (이후 새로고침 함)
+        setCustomPopup('정보가 성공적으로 기록되었습니다! \n 현실 세계에서 뵙겠습니다.');
+      }
+    } catch (err) {
+      setCustomPopup('네트워크 연결이 원활하지 않습니다.');
+    }
   };
   
-  const closePopupAndReload = () => { setCustomPopup(null); window.location.reload(); };
+  const closePopupAndReload = () => {
+  // 🚀 [수정] 성공 메시지가 포함된 경우에만 메인 페이지로 리로드
+    if (customPopup && (customPopup.includes('성공') || customPopup.includes('처음부터'))) {
+      setCustomPopup(null);
+      window.location.reload();
+    } else {
+      // 🚀 번호 오류나 단순 실패 시에는 팝업만 닫고 현재 페이지(입력창) 유지
+      setCustomPopup(null);
+    }
+  };
 
   const renderScreen = () => {
     if (step === 'mode_select') {
@@ -389,7 +429,12 @@ function Game() {
             지금, 당신의 선택과 성향을 통해 숨겨진 현실의 인생 캐릭터를 발견하세요.
           </div>
           <form onSubmit={submitPhoneNumber} style={{ marginTop: '30px' }}>
-            <input name="phone" placeholder="010-XXXX-XXXX" required pattern="[0-9\-]+" style={{ textAlign: 'center' }} />
+           <input 
+              name="phone" 
+              placeholder="01012345678 (숫자만 입력 가능)" 
+              required 
+              style={{ textAlign: 'center' }} 
+            />
             <button type="submit" className="pixel-button" style={{ background: '#8e44ad', borderBottomColor: '#5b2c6f' }}>
               현실 세계로 귀환하기
             </button>
