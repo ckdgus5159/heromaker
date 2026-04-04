@@ -203,25 +203,32 @@ function Game() {
       );
     }
 
-    if (step === 'start') {
-      return (
-        <div className="game-container start-screen">
-          <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
-          <div className="hero-graphic" style={{ marginTop: '-40px' }}>
-            <div className="main-emoji">🗡️🛡️</div>
-            <p className="subtitle" style={{ fontSize: '18px', lineHeight: '1.6' }}>
-              평화롭던 마을에 드리운 어둠...<br/>
-              세계의 운명이 당신의 선택에 달렸다.
-            </p>
-          </div>
-        <div className="button-area" style={{ marginTop: '0' }}>
-          <button onClick={() => setStep('info')} className="pixel-button">
+  if (step === 'start') {
+    return (
+      <div className="game-container start-screen">
+        <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
+        
+        {/* 🚀 문구와 버튼을 하나의 큰 그룹으로 묶음 */}
+        <div className="start-content-group">
+          <div className="main-emoji">🗡️🛡️</div>
+          
+          <p className="subtitle">
+            평화롭던 마을에 드리운 어둠...<br/>
+            세계의 운명이 당신의 선택에 달렸다.
+          </p>
+
+          {/* 🚀 적당한 여백(margin-top)만 주고 바로 배치 */}
+          <button 
+            onClick={() => setStep('info')} 
+            className="pixel-button start-btn"
+            style={{ marginTop: '20px' }} 
+          >
             게임 시작
           </button>
         </div>
-        </div>
-      );
-    }
+      </div>
+    );
+  }
 
     if (step === 'info') {
       return (
