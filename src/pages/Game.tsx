@@ -6,7 +6,7 @@ import { questions, enneagramTypes, getGuildName } from '../data/enneagram';
 import { supabase } from '../lib/supabase';
 import { useLocation } from 'react-router-dom'; // useLocation 추가
 
-import mageIcon from '../src/assets/mage.png';
+import mageIcon from '../assets/mage.png';
 import warriorIcon from '../assets/warrior.png';
 import paladinIcon from '../assets/paladin.png';
 
