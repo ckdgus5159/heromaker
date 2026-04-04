@@ -408,6 +408,35 @@ html, body {
   .pixel-button { padding: 12px 10px; margin-top: 8px; }
 }
 
+/* 🌟 마탑 영창(연타) 버튼: 세로로 2배 확대 및 연타 최적화 */
+.chant-btn {
+  /* 기존 약 50-60px에서 120px로 대폭 확대 */
+  height: 120px !important; 
+  font-size: 26px !important;
+  background-color: var(--mage-blue) !important;
+  border-bottom: 8px solid #2980b9 !important; /* 버튼 두께감 추가 */
+  margin-top: 15px !important;
+  margin-bottom: 10px !important;
+  
+  /* 🚀 클릭 씹힘 방지 핵심 설정 */
+  touch-action: manipulation; /* 브라우저 지연 시간 제거 */
+  user-select: none;         /* 연타 시 텍스트 선택 방지 */
+  -webkit-tap-highlight-color: transparent; /* 터치 시 파란 박스 제거 */
+}
+
+.chant-btn:active {
+  transform: translateY(4px);
+  border-bottom-width: 2px !important;
+}
+
+/* 모바일 전용 초압축 모드에서도 크기 유지 */
+@media (max-height: 700px) {
+  .chant-btn {
+    height: 100px !important; 
+    font-size: 22px !important;
+  }
+}
+
 /* 데스크탑 뷰 최적화 (가로 너비 제한) */
 @media (min-width: 500px) {
   body {

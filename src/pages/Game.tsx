@@ -277,7 +277,19 @@ function Game() {
             {countdown !== null ? ( <div className="countdown-display">{countdown}</div> ) : (
               <>
                 {magicStatus === 'idle' && <button onClick={() => startWithCountdown(startMagicGame)} className="pixel-button start-btn">영창 시작</button>}
-                {magicStatus !== 'idle' && <button onClick={handleChantClick} className={`pixel-button chant-btn ${magicStatus !== 'playing' ? 'disabled' : ''}`} disabled={magicStatus !== 'playing'}>영창 연타!</button>}
+                {magicStatus !== 'idle' && (
+                  <button 
+                    /* onClick 대신 onPointerDown 사용 시 반응 속도가 훨씬 빠릅니다 */
+                    onPointerDown={(e) => {
+                      e.preventDefault(); // 브라우저 기본 동작 방지
+                      handleChantClick();
+                    }}
+                    className={`pixel-button chant-btn ${magicStatus !== 'playing' ? 'disabled' : ''}`} 
+                    disabled={magicStatus !== 'playing'}
+                  >
+                    영창 연타!!!
+                  </button>
+                )}
                 {(magicStatus === 'win' || magicStatus === 'lose') && <button onClick={resetMagicGame} className="pixel-button start-btn">다시 도전</button>}
               </>
             )}
