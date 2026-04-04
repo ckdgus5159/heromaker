@@ -97,7 +97,21 @@ function Game() {
   const resetMinigame = () => { setTime(0); setIsRunning(false); setGameResultMsg(''); if (timerRef.current) clearInterval(timerRef.current); };
   
   const startMagicGame = () => { setMagicTime(10.0); setMagicPower(0); setMagicStatus('playing'); magicTimerRef.current = window.setInterval(() => { setMagicTime((prev) => { if (prev <= 0.1) { clearInterval(magicTimerRef.current!); setMagicStatus('lose'); return 0; } return prev - 0.1; }); setMagicPower((prev) => Math.max(0, prev - 0.5)); }, 100); };
-  const handleChantClick = () => { if (magicStatus !== 'playing') return; setMagicPower((prev) => { const nextPower = prev + 1; if (nextPower >= 50) { clearInterval(magicTimerRef.current!); setMagicStatus('win'); } return nextPower; }); };
+  const handleChantClick = () => {
+  if (magicStatus !== 'playing') return;
+  
+  // 상태 업데이트는 비동기이므로 연속 호출 시 리액트가 배칭(Batching) 처리를 합니다.
+  // 함수형 업데이트(prev => prev + 1)를 사용하고 계시므로 로직은 정확합니다.
+  setMagicPower((prev) => {
+    const nextPower = prev + 1;
+    if (nextPower >= 50) {
+      if (magicTimerRef.current) clearInterval(magicTimerRef.current);
+      setMagicStatus('win');
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+    return nextPower;
+  });
+};
   const resetMagicGame = () => { setMagicTime(10.0); setMagicPower(0); setMagicStatus('idle'); setCountdown(null); if (magicTimerRef.current) clearInterval(magicTimerRef.current); };
   
   const startPriestGame = () => { setPriestTime(10.0); setPriestScore(0); setPriestStatus('playing'); setActiveTile(null); priestTimerRef.current = window.setInterval(() => { setPriestTime(prev => { if (prev <= 0.1) { clearInterval(priestTimerRef.current!); setPriestStatus('end'); setActiveTile(null); return 0; } return prev - 0.1; }); }, 100); };
@@ -249,7 +263,12 @@ function Game() {
       return (
         <div className="game-container minigame-screen">
           <h2 className="pixel-text">사자 길드 훈련장</h2>
-          <div className="lore-box"><p><strong>7.77초</strong>의 타이밍을 노려 일격을 가하라!</p></div>
+          <div className="lore-box">
+            <p><strong>"진정한 전사는 찰나의 순간을 지배한다!"</strong></p>
+            <p style={{ fontSize: '14px', color: '#bdc3c7', marginTop: '5px' }}>
+              적의 허점을 뚫기 위해 정확히 7.77초에 검을 멈추세요!
+            </p>
+          </div>
           <div className="timer-box"><div className="timer-display">{(time / 1000).toFixed(2)}</div><p className="game-msg">{gameResultMsg || 'STOP 타이밍을 노리세요!'}</p></div>
           <div className="answer-buttons">
             {!isRunning ? (
@@ -268,6 +287,12 @@ function Game() {
       return (
         <div className="game-container minigame-screen">
           <h2 className="pixel-text">지혜 마탑 훈련장</h2>
+          <div className="lore-box">
+            <p><strong>"쏟아지는 마력을 감당할 지혜가 있는가?"</strong></p>
+            <p style={{ fontSize: '14px', color: '#bdc3c7', marginTop: '5px' }}>
+              마왕을 무찌르기 위해 제한 시간 내 마법을 난사하세요!!
+            </p>
+          </div>
           <div className="timer-box mage-theme">
             <div className="magic-time">{magicTime.toFixed(1)}초</div>
             <div className="power-bar-container"><div className="power-bar-fill" style={{ width: `${Math.min(100, (magicPower / 50) * 100)}%` }}></div></div>
@@ -303,6 +328,12 @@ function Game() {
       return (
         <div className="game-container minigame-screen">
           <h2 className="pixel-text">신성 교단 훈련장</h2>
+          <div className="lore-box">
+            <p><strong>"혼돈 속에서 성스러운 빛을 찾아라!"</strong></p>
+            <p style={{ fontSize: '14px', color: '#bdc3c7', marginTop: '5px' }}>
+              동료들을 치유하기 위해 나타나는 성스러운 표식을 빠르게 터치하세요!
+            </p>
+          </div>
           <div className="timer-box priest-theme">
             <div className="priest-header"><span>{priestTime.toFixed(1)}초</span><span>✨ 점수: {priestScore}</span></div>
             <div className="tile-grid">{Array.from({ length: 16 }).map((_, idx) => ( <div key={idx} className={`tile ${activeTile === idx ? 'active' : ''}`} onMouseDown={() => handleTileClick(idx)} onTouchStart={(e) => { e.preventDefault(); handleTileClick(idx); }}></div> ))}</div>
