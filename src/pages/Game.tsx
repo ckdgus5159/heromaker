@@ -203,32 +203,36 @@ function Game() {
       );
     }
 
-  if (step === 'start') {
-    return (
-      <div className="game-container start-screen">
-        <h1 className="pixel-text title">나만의<br/>용사 전설</h1>
-        
-        {/* 🚀 문구와 버튼을 하나의 큰 그룹으로 묶음 */}
-        <div className="start-content-group">
-          <div className="main-emoji">🗡️🛡️</div>
+if (step === 'start') {
+      return (
+        <div className="game-container start-screen">
+          {/* 타이틀과 서브 타이틀 사이의 여백을 CSS로 조절하기 위해 inline style 제거 */}
+          <h1 className="pixel-text title">
+            나만의<br/>용사 전설
+          </h1>
           
-          <p className="subtitle">
-            평화롭던 마을에 드리운 어둠...<br/>
-            세계의 운명이 당신의 선택에 달렸다.
-          </p>
+          <div className="hero-graphic">
+            {/* 🚀 [수정] 이모지 대신 픽셀 아트 이미지를 삽입 */}
+            <img 
+              src={warriorIcon} 
+              alt="Warrior Pixel Art" 
+              className="main-hero-img" 
+            />
+            
+            <p className="subtitle">
+              평화롭던 마을에 드리운 어둠...<br/>
+              세계의 운명이 당신의 선택에 달렸다.
+            </p>
+          </div>
 
-          {/* 🚀 적당한 여백(margin-top)만 주고 바로 배치 */}
-          <button 
-            onClick={() => setStep('info')} 
-            className="pixel-button start-btn"
-            style={{ marginTop: '20px' }} 
-          >
-            게임 시작
-          </button>
+          <div className="button-area">
+            <button onClick={() => setStep('info')} className="pixel-button">
+              게임 시작
+            </button>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
     if (step === 'info') {
       return (

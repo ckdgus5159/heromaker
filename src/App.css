@@ -328,29 +328,59 @@ html, body {
   align-items: center;
   box-sizing: border-box;
 }
-
+/* 타이틀 스타일 */
+.start-screen .title {
+  font-size: clamp(32px, 8vw, 48px); /* 크기 키움 */
+  line-height: 1.2;
+  margin-top: 20px;
+  margin-bottom: 40px; /* 🚀 중앙 그래픽과의 충분한 여백 */
+}
 /* App.css 수정 또는 추가 */
 .start-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 중앙 정렬로 변경하여 위아래 균형을 맞춤 */
-  align-items: center;
-  padding-top: 20px;
+  /* 화면 중앙 정렬을 유지하면서 위아래로 더 쾌적하게 배치 */
+  justify-content: space-around; 
+  padding: 40px 20px; /* 상하 패딩 대폭 추가 */
 }
 
+/* 중앙 그래픽 및 문구 그룹 */
 .start-screen .hero-graphic {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 30px; /* 🚀 이미지와 문구 사이의 쾌적한 간격 */
+  width: 100%;
 }
 
+/* 🚀 새롭게 추가된 픽셀 이미지 스타일 */
+.start-screen .main-hero-img {
+  height: clamp(80px, 25vw, 130px); /* 화면 크기에 따른 유동적 크기 */
+  width: auto;
+  
+  /* 픽셀 아트를 선명하게 확대하는 핵심 속성 */
+  image-rendering: pixelated; 
+  image-rendering: -moz-crisp-edges;
+  
+  /* 살짝 입체감을 주는 그림자 */
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); 
+}
+
+/* 서브 타이틀 문구 */
+.start-screen .subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #ecf0f1;
+  text-align: center;
+  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  margin-bottom: 50px; /* 🚀 하단 버튼과의 충분한 여백 */
+  max-width: 90%; /* 너무 넓어지는 것 방지 */
+}
+
+/* 하단 버튼 영역 */
 .start-screen .button-area {
   width: 100%;
   display: flex;
   justify-content: center;
-  /* 최하단 고정 속성이 있다면 제거하세요 */
-  position: static; 
+  margin-bottom: 20px; /* 화면 끝과의 여백 */
 }
 
 .card-avatar-zone {
