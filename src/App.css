@@ -144,21 +144,29 @@ html, body {
 }
 
 .game-container {
-  height: 100vh; 
-  /* 🚀 최신 브라우저를 위한 동적 높이 설정 */
-  height: 100dvh;
-  flex: 1;
+  /* 1. 높이 설정: 주소창에 대응하는 dVh 사용 */
+  height: 100vh; /* 폴백(대비책) */
+  height: 100dvh; 
+  
+  /* 2. 레이아웃: 중앙 정렬 및 여백 확보 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 콘텐츠를 세로 중앙에 배치하여 버튼을 위로 올림 */
+  align-items: center;
+  
   width: 100%;
+  max-width: 500px; /* 너무 넓어지는 것 방지 */
+  margin: 0 auto;
+  
   background-color: var(--container-bg);
   border: 4px solid var(--border-light);
   border-top: none;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   box-sizing: border-box;
-  /* 모바일에서 내용이 길어지면 스크롤이 발생하도록 설정 */
-  min-height: calc(100vh - 60px);
+  
+  /* 3. 스크롤 제어: 100dvh를 넘지 않게 하되, 필요시 내부 스크롤 */
+  overflow-y: auto; 
+  position: relative;
 }
 
 
