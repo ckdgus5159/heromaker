@@ -135,7 +135,9 @@ function Game() {
   const handleTileClick = (index: number) => { if (priestStatus !== 'playing') return; if (activeTile === index) { setPriestScore(prev => prev + 1); setActiveTile(null); } };
   const resetPriestGame = () => { setPriestTime(10.0); setPriestScore(0); setPriestStatus('idle'); setActiveTile(null); setCountdown(null); if (priestTimerRef.current) clearInterval(priestTimerRef.current); };
   
-  const handleWakeUp = () => { if (gameMode === 'npc') setStep('wakeup'); else setCustomPopup('차원의 문이 열렸습니다. \n 다음 스테이지로 이동하세요.'); };
+  const handleWakeUp = () => { 
+    setStep('wakeup'); 
+  };
   
   const submitPhoneNumber = async (e: React.FormEvent<HTMLFormElement>) => { 
     e.preventDefault(); 
@@ -187,13 +189,26 @@ function Game() {
             <input placeholder="이름 (예: 용사)" required onChange={e => setInfo({...info, name: e.target.value})} />
             <input placeholder="나이" type="number" required onChange={e => setInfo({...info, age: e.target.value})} />
             <input placeholder="직업" required onChange={e => setInfo({...info, job: e.target.value})} />
-            <input placeholder="취미 (무기)" required onChange={e => setInfo({...info, hobby: e.target.value})} />
-            <select value={info.defense} onChange={e => setInfo({...info, defense: e.target.value})}>
-              <option value="실없는 농담하기">실없는 농담으로 넘기기</option>
-              <option value="일단 잠자기">일단 침대에 눕기</option>
-              <option value="합리화하기">그럴싸한 핑계 대기</option>
-              <option value="맛있는 거 먹기">폭식으로 잊어버리기</option>
-            </select>
+            <div className="stat-input-group">
+              <label className="stat-label">⚔️ 무기 (나만의 에너지 발산법)</label>
+              <input 
+                placeholder="취미를 입력하세요 (예: 운동, 독서)" 
+                required 
+                onChange={e => setInfo({...info, hobby: e.target.value})} 
+              />
+            </div>
+            <div className="info-section">
+              <label className="stat-label">🛡️ 방어구 (방어기제 선택)</label>
+              <p className="description-text">위기 상황에서 당신을 보호하는 마음의 습관입니다.</p>
+              <select value={info.defense} onChange={e => setInfo({...info, defense: e.target.value})}>
+               <option value="실없는 농담하기">실없는 농담 (유머로 승화)</option>
+                <option value="일단 푹 자기">일단 푹 자기 (잠시 현실 피하기)</option>
+                <option value="합리적인 이유 찾기">이유 찾기 (논리적 분석)</option>
+                <option value="맛있는 거 먹기">맛있는 거 먹기 (즐거움으로 보상)</option>
+                <option value="남 탓하며 투덜대기">남 탓하기 (감정 쏟아내기)</option>
+                <option value="쇼핑하며 지르기">물건 사기 (즉각적 보상)</option>
+              </select>
+            </div>
             <button type="submit" className="pixel-button">모험 시작</button>
           </form>
         </div>
@@ -242,6 +257,7 @@ function Game() {
       if (isPriestGuild) guildPixelIcon = paladinIcon;
 
     if (step === 'result') {
+      
       return (
         <div className="game-container result-screen">
           <h2 className="pixel-text">🎉 용사 탄생! 🎉</h2>
