@@ -1,4 +1,4 @@
-/* 1. 폰트 설정 */
+/* 1. 폰트 및 변수 설정 */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @font-face {
@@ -9,33 +9,30 @@
 }
 
 :root {
-  --bg-dark: #1a1a1a;        
-  --container-bg: #2c3e50;   
-  --point-yellow: #f1c40f;   
-  --point-green: #2ecc71;    
-  --border-light: #ecf0f1;   
-  --box-black: #000000;      
-  --lion-red: #e67e22;       
-  --mage-blue: #3498db;      
-  --priest-yellow: #f1c40f;  
+  --bg-dark: #1a1a1a;
+  --container-bg: #2c3e50;
+  --point-yellow: #f1c40f;
+  --point-green: #2ecc71;
+  --border-light: #ecf0f1;
+  --box-black: #000000;
+  --lion-red: #e67e22;
+  --mage-blue: #3498db;
+  --priest-yellow: #f1c40f;
 }
 
-/* 📱 기초 레이아웃: 모바일 스크롤 가능하도록 수정 */
+/* 2. 기초 레이아웃 */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100%; 
+  height: 100%;
   background-color: var(--bg-dark);
   background-image: radial-gradient(#333 1px, transparent 1px);
   background-size: 20px 20px;
   font-family: 'DungGeunMo', 'Press Start 2P', sans-serif;
   color: #fff;
-  /* 가로 스크롤 방지 및 세로 스크롤 허용 */
   overflow-x: hidden;
-  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
 }
 
 #root {
@@ -46,7 +43,7 @@ html, body {
   width: 100%;
 }
 
-/* --- 👑 상단 고정 상태창: Sticky로 변경하여 스크롤 시에도 상단 유지 --- */
+/* 3. 상단 헤더 & 팝업 */
 .header-status-bar {
   position: sticky;
   top: 0;
@@ -62,46 +59,6 @@ html, body {
   z-index: 1000;
   box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   box-sizing: border-box;
-}
-
-.custom-popup-overlay {
-  position: fixed; /* 화면에 고정 */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85); /* 배경 어둡게 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000; /* 최상단 배치 */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.custom-popup-box {
-  background-color: var(--container-bg);
-  border: 4px solid var(--border-light);
-  padding: 20px;
-  width: 100%;
-  max-width: 320px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  animation: popupScale 0.2s ease-out;
-}
-
-@keyframes popupScale {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-.custom-popup-box p {
-  font-family: 'DungGeunMo';
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  color: #fff;
-  word-break: keep-all;
 }
 
 .header-content {
@@ -133,51 +90,49 @@ html, body {
   border-radius: 4px;
 }
 
-/* --- 🎮 메인 콘텐츠 레이아웃 --- */
+/* 팝업 시스템 */
+.custom-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.custom-popup-box {
+  background-color: var(--container-bg);
+  border: 4px solid var(--border-light);
+  padding: 20px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  animation: popupScale 0.2s ease-out;
+}
+
+@keyframes popupScale {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 4. 메인 콘텐츠 및 게임 컨테이너 */
 .main-content-wrapper {
   flex: 1;
   width: 100%;
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  margin-top: -4px;
-}
-
-/* 시작 화면 콘텐츠 그룹 */
-.start-content-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  /* 중앙 정렬을 유지하면서 요소들이 붙어있게 함 */
-  margin-top: 10px; 
-}
-
-.start-content-group .main-emoji {
-  font-size: 70px;
-  margin-bottom: 15px;
-}
-
-.start-content-group .subtitle {
-  font-size: 18px;
-  line-height: 1.6;
-  text-align: center;
-  word-break: keep-all;
-  margin-bottom: 0; /* 버튼과의 여백은 버튼의 marginTop에서 조절 */
-}
-
-/* 🚀 혹시 남아있을지 모르는 하단 고정 스타일 해제 */
-.button-area {
-  position: static !important; 
-  transform: none !important;
-  margin-top: 20px;
 }
 
 .game-container {
-  height: 100vh; 
-  /* 🚀 최신 브라우저를 위한 동적 높이 설정 */
-  height: 100dvh;
-  flex: 1;
+  height: 100dvh; /* 동적 뷰포트 높이 우선 */
   width: 100%;
   background-color: var(--container-bg);
   border: 4px solid var(--border-light);
@@ -187,49 +142,49 @@ html, body {
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  /* 모바일에서 내용이 길어지면 스크롤이 발생하도록 설정 */
-  min-height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 
-/* --- ✨ 메인 화면: clamp로 유연한 폰트/간격 적용 --- */
-.title { 
-  font-size: clamp(28px, 10vw, 38px); 
+/* 5. 시작 화면 (Start Screen) 최적화 */
+.start-screen {
+  justify-content: center; /* 중앙 집중형 레이아웃 */
+  padding: 40px 20px;
+}
+
+.start-screen .title { 
+  font-size: clamp(32px, 8vw, 48px); 
   color: var(--point-yellow);
   text-shadow: 3px 3px #c0392b;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   line-height: 1.2;
+  text-align: center;
 }
 
-.hero-graphic {
-  width: 100%;
-  flex: 1;
+.start-content-group {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  margin: 10px 0;
+  width: 100%;
+  gap: 25px; /* 요소 간 일정한 간격 */
 }
 
-.main-emoji {
-  font-size: clamp(60px, 20vw, 100px);
-  margin-bottom: clamp(20px, 10vh, 100px);
-  animation: floatEmoji 2.5s ease-in-out infinite;
+.start-screen .main-hero-img {
+  height: clamp(80px, 25vw, 130px);
+  width: auto;
+  image-rendering: pixelated; 
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); 
 }
 
-@keyframes floatEmoji {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(8deg); }
-}
-
-.subtitle {
-  font-size: clamp(14px, 4vw, 16px);
-  color: #bdc3c7;
+.start-screen .subtitle {
+  font-size: 18px;
   line-height: 1.6;
+  color: #ecf0f1;
+  text-align: center;
   word-break: keep-all;
+  max-width: 90%;
 }
 
-/* --- 🔘 버튼 시스템: 터치 최적화 --- */
+/* 6. 버튼 시스템 */
 .pixel-button {
   background-color: var(--point-green);
   border: none;
@@ -243,7 +198,7 @@ html, body {
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
-  touch-action: manipulation; /* 터치 지연 방지 */
+  touch-action: manipulation;
 }
 
 .pixel-button:active {
@@ -257,192 +212,48 @@ html, body {
 .gray { background-color: #34495e; border-bottom-color: #2c3e50; }
 .option-btn { text-align: left; font-size: 16px; margin-top: 12px; }
 
-/* --- 📝 입력창 & 질문 박스 --- */
-.info-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin: 20px 0;
+/* 영창 버튼 전용 */
+.chant-btn {
+  height: 120px !important; 
+  font-size: 26px !important;
+  background-color: var(--mage-blue) !important;
+  border-bottom: 8px solid #2980b9 !important;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* 7. 입력창, 질문 박스, 카드 */
+.info-form { width: 100%; display: flex; flex-direction: column; gap: 15px; margin: 20px 0; }
 .info-form input, .info-form select {
-  width: 100%;
-  padding: 14px;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: var(--point-green); 
-  border: 2px solid #7f8c8d;
-  font-family: 'DungGeunMo';
-  font-size: 16px;
-  box-sizing: border-box;
+  width: 100%; padding: 14px; background-color: rgba(0, 0, 0, 0.4);
+  color: var(--point-green); border: 2px solid #7f8c8d; font-family: 'DungGeunMo'; font-size: 16px;
 }
 
 .question-box {
-  background-color: var(--box-black);
-  border: 3px solid var(--border-light);
-  padding: clamp(15px, 5vw, 20px);
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  margin-bottom: 25px;
-  width: 100%;
-  box-sizing: border-box;
+  background-color: var(--box-black); border: 3px solid var(--border-light);
+  padding: 20px; min-height: 80px; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; margin-bottom: 25px; width: 100%;
 }
 
-.question-text {
-  font-size: clamp(15px, 4.5vw, 17px);
-  line-height: 1.6;
-}
-
-/* --- ⏳ 로딩 화면 (겹침 방지) --- */
-.loading-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 300px;
-  padding: 40px 20px;
-}
-
-.loading-text-zone {
-  margin-bottom: clamp(30px, 8vh, 50px);
-}
-
-.bounce-anim {
-  font-size: clamp(50px, 15vw, 80px);
-  animation: bounce 1s infinite alternate;
-}
-
-/* --- 🧑‍🎤 결과 카드 --- */
 .character-card {
-  background: rgba(0, 0, 0, 0.3);
-  border: 3px dashed var(--point-yellow);
-  padding: 20px;
-  margin: 15px 0;
-  border-radius: 8px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-}
-/* 타이틀 스타일 */
-.start-screen .title {
-  font-size: clamp(32px, 8vw, 48px); /* 크기 키움 */
-  line-height: 1.2;
-  margin-top: 20px;
-  margin-bottom: 40px; /* 🚀 중앙 그래픽과의 충분한 여백 */
-}
-/* App.css 수정 또는 추가 */
-.start-screen {
-  /* 화면 중앙 정렬을 유지하면서 위아래로 더 쾌적하게 배치 */
-  justify-content: space-around; 
-  padding: 40px 20px; /* 상하 패딩 대폭 추가 */
-}
-
-/* 중앙 그래픽 및 문구 그룹 */
-.start-screen .hero-graphic {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px; /* 🚀 이미지와 문구 사이의 쾌적한 간격 */
-  width: 100%;
-}
-
-/* 🚀 새롭게 추가된 픽셀 이미지 스타일 */
-.start-screen .main-hero-img {
-  height: clamp(80px, 25vw, 130px); /* 화면 크기에 따른 유동적 크기 */
-  width: auto;
-  
-  /* 픽셀 아트를 선명하게 확대하는 핵심 속성 */
-  image-rendering: pixelated; 
-  image-rendering: -moz-crisp-edges;
-  
-  /* 살짝 입체감을 주는 그림자 */
-  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); 
-}
-
-/* 서브 타이틀 문구 */
-.start-screen .subtitle {
-  font-size: 18px;
-  line-height: 1.6;
-  color: #ecf0f1;
-  text-align: center;
-  word-break: keep-all; /* 단어 단위 줄바꿈 */
-  margin-bottom: 50px; /* 🚀 하단 버튼과의 충분한 여백 */
-  max-width: 90%; /* 너무 넓어지는 것 방지 */
-}
-
-/* 하단 버튼 영역 */
-.start-screen .button-area {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px; /* 화면 끝과의 여백 */
-}
-
-.card-avatar-zone {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: clamp(80px, 20vw, 120px);
-  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.3); border: 3px dashed var(--point-yellow);
+  padding: 20px; margin: 15px 0; border-radius: 8px; width: 100%;
+  display: flex; flex-direction: column; align-items: center;
 }
 
 .hero-pixel-icon {
-  height: 100%; /* 부모 높이에 맞춤 */
-  width: auto;  /* 비율 유지 */
-  /* 픽셀 아트를 선명하게 확대하는 핵심 속성 */
-  image-rendering: pixelated; 
-  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); /* 기존 그림자 효과 유지 */
-}
-
-.hero-icon-large {
-  font-size: clamp(60px, 20vw, 100px);
+  height: 100px; width: auto; image-rendering: pixelated; 
   filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
 }
 
-.hero-title {
-  font-size: clamp(18px, 5vw, 20px);
-  margin-bottom: 10px;
-  color: #1abc9c;
-}
+.card-info-box { background: rgba(0, 0, 0, 0.5); padding: 15px; margin: 10px 0; width: 100%; }
+.stat-row { display: flex; justify-content: space-between; margin: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; font-size: 14px; }
 
-.card-info-box {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 4px;
-  padding: 15px;
-  margin: 10px 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding-bottom: 8px;
-  font-size: 14px;
-}
-
-/* --- 🎮 미니게임 타이머 박스 --- */
+/* 8. 미니게임 요소 */
 .timer-box {
-  background-color: var(--box-black) !important;
-  border: 4px solid var(--border-light) !important;
-  padding: 20px 10px;
-  margin: 15px 0;
-  border-radius: 8px;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 180px;
+  background-color: var(--box-black); border: 4px solid var(--border-light);
+  padding: 20px; margin: 15px 0; border-radius: 8px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; min-height: 180px;
 }
 
 .timer-display, .magic-time, .priest-header {
@@ -450,92 +261,21 @@ html, body {
   font-size: clamp(20px, 7vw, 30px) !important;
   color: var(--point-yellow) !important;
   text-shadow: 2px 2px #c0392b;
-  margin-bottom: 15px;
-  word-break: break-all;
 }
 
-/* 마탑 게이지 */
-.power-bar-container {
-  width: 100%;
-  height: 25px;
-  background-color: #34495e;
-  border: 3px solid var(--border-light);
-  border-radius: 15px;
-  overflow: hidden;
-  margin: 15px 0;
+.tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 280px; }
+.tile { aspect-ratio: 1; background-color: #34495e; border: 2px solid var(--border-light); border-radius: 4px; }
+.tile.active { background-color: var(--priest-yellow); box-shadow: 0 0 10px var(--priest-yellow); }
+
+/* 9. 애니메이션 및 반응형 */
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-20px); } }
+
+@media (max-height: 600px) {
+  .title { margin-top: 10px; margin-bottom: 10px; font-size: 28px; }
+  .start-content-group { gap: 15px; }
+  .chant-btn { height: 90px !important; font-size: 20px !important; }
 }
 
-.power-bar-fill {
-  height: 100%;
-  background-color: var(--mage-blue);
-  transition: width 0.1s ease-out;
-}
-
-/* 교단 타일 그리드 */
-.tile-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(5px, 2vw, 10px);
-  width: 100%;
-  max-width: 280px;
-  margin-top: 10px;
-}
-
-.tile {
-  aspect-ratio: 1;
-  background-color: #34495e;
-  border: 2px solid var(--border-light);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.tile.active {
-  background-color: var(--priest-yellow);
-  box-shadow: 0 0 10px var(--priest-yellow);
-}
-
-/* 📱 모바일 적응형: 화면 높이가 낮은 기기 대응 */
-@media (max-height: 550px) {
-  .title { margin-top: 10px; margin-bottom: 10px; }
-  .main-emoji { margin-bottom: 00px; }
-  .game-container { padding: 10px; }
-  .question-box { margin-bottom: 10px; }
-  .pixel-button { padding: 12px 10px; margin-top: 8px; }
-}
-
-/* 🌟 마탑 영창(연타) 버튼: 세로로 2배 확대 및 연타 최적화 */
-.chant-btn {
-  /* 기존 약 50-60px에서 120px로 대폭 확대 */
-  height: 120px !important; 
-  font-size: 26px !important;
-  background-color: var(--mage-blue) !important;
-  border-bottom: 8px solid #2980b9 !important; /* 버튼 두께감 추가 */
-  margin-top: 15px !important;
-  margin-bottom: 10px !important;
-  
-  /* 🚀 클릭 씹힘 방지 핵심 설정 */
-  touch-action: manipulation; /* 브라우저 지연 시간 제거 */
-  user-select: none;         /* 연타 시 텍스트 선택 방지 */
-  -webkit-tap-highlight-color: transparent; /* 터치 시 파란 박스 제거 */
-}
-
-.chant-btn:active {
-  transform: translateY(4px);
-  border-bottom-width: 2px !important;
-}
-
-/* 모바일 전용 초압축 모드에서도 크기 유지 */
-@media (max-height: 700px) {
-  .chant-btn {
-    height: 100px !important; 
-    font-size: 22px !important;
-  }
-}
-
-/* 데스크탑 뷰 최적화 (가로 너비 제한) */
 @media (min-width: 500px) {
-  body {
-    display: flex;
-    justify-content: center;
-  }
+  body { display: flex; justify-content: center; }
 }
