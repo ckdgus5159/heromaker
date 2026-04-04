@@ -6,6 +6,10 @@ import { questions, enneagramTypes, getGuildName } from '../data/enneagram';
 import { supabase } from '../lib/supabase';
 import { useLocation } from 'react-router-dom'; // useLocation 추가
 
+import mageIcon from '../src/assets/mage.png';
+import warriorIcon from '../assets/warrior.png';
+import paladinIcon from '../assets/paladin.png';
+
 function Game() {
   const [step, setStep] = useState<Step>('mode_select');
   const [gameMode, setGameMode] = useState<GameMode>(null);
@@ -233,13 +237,21 @@ function Game() {
     const isMageGuild = [5, 6, 7].includes(finalType);
     const isPriestGuild = [2, 3, 4].includes(finalType);
 
+      let guildPixelIcon = warriorIcon; // 기본값
+      if (isMageGuild) guildPixelIcon = mageIcon;
+      if (isPriestGuild) guildPixelIcon = paladinIcon;
+
     if (step === 'result') {
       return (
         <div className="game-container result-screen">
           <h2 className="pixel-text">🎉 용사 탄생! 🎉</h2>
           <div className="character-card">
             <div className="card-avatar-zone">
-              <span className="hero-icon-large">🧑‍🎤</span>
+              <img 
+                src={guildPixelIcon} 
+                alt="용사 아이콘" 
+                className="hero-pixel-icon" 
+              />
             </div>
             <p className="guild-name">[{getGuildName(finalType)} 소속]</p>
             <h3 className="hero-title" style={{ fontSize: '22px', color: '#1abc9c' }}>

@@ -305,6 +305,14 @@ html, body {
   margin-bottom: 20px;
 }
 
+.hero-pixel-icon {
+  height: 100%; /* 부모 높이에 맞춤 */
+  width: auto;  /* 비율 유지 */
+  /* 픽셀 아트를 선명하게 확대하는 핵심 속성 */
+  image-rendering: pixelated; 
+  filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2)); /* 기존 그림자 효과 유지 */
+}
+
 .hero-icon-large {
   font-size: clamp(60px, 20vw, 100px);
   filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.2));
